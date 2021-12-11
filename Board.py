@@ -56,6 +56,15 @@ class Board:
         # might need to use deep copy
         pass
 
+    def pieces_of_color(self, color):
+        # returns pieces of specific color
+        pieces = []
+        for piece in self.pieces:
+            if piece.color == color:
+                pieces.append(piece)
+        
+        return pieces
+
     def next_piece_moves():
         # shows the next possible immediate moves for a chosen piece
         # calls istilevalid
@@ -72,6 +81,11 @@ class Board:
         
         return None
 
+    def get_piece(self, name):
+        for piece in self.pieces:
+            if piece.name == name:
+                return piece
+
     def choose_move():
         # calls _next_user_moves
         pass
@@ -85,12 +99,16 @@ class Board:
             for j in range(0, 8):
                 
                 # print piece in tile
-                # print("row " + str(i))
-                # print("col " + str(j))
                 piece = self._piece_in_pos(i, j)
                 if  piece != None:
-                    print(piece.name, end = "")
+                    print("|" + piece.name, end = "")
+
+                    name = piece.name
+                    if len(piece.name) == 3:
+                        print(" ", end = "")
+                    elif len(piece.name) == 2:
+                        print("  ", end = "")
                 else:
-                    print("|   |", end = "")
-            print("")
+                    print("|    ", end = "")
+            print("|")
         print("")

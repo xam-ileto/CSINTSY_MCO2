@@ -7,5 +7,10 @@ class Piece:
         self.is_king = False
         pass
 
-    def move():
-        pass
+    def move(self, row, col):
+        self.row = row
+        self.col = col
+
+    def make_king(self):
+        self.name = self.name + "K"
+        self.is_king = True
