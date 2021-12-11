@@ -27,7 +27,6 @@ class Board:
                     for x in range(0, 7, 2):
                         pos = [i,x]
                         starting_positions.append(pos)
-        print(starting_positions)
 
         # generate each starting piece
         whitecount = 1
@@ -46,9 +45,12 @@ class Board:
                 self.pieces.append(new_piece)
                 redcount += 1
         
-        
+        # set remaining piece values
+        self.remaining_red = 12
+        self.remaining_white = 12
+        self.remaining_red_kings = 0
+        self.remaining_white_kings = 0
             
-
 
     def _init_this():
         # might need to use deep copy
@@ -58,5 +60,13 @@ class Board:
         # calls _next_user_moves
         pass
     
-    def print_board():
-        pass
+    def print_board(self):
+        print("---BOARD---")
+        for i in range(0, 8):
+            if(i == 0):
+                print("     0    1    2    3    4    5    6    7")
+            print(str(i + 1) + "  ", end = "")
+            for j in range(0, 8):
+                print("|   |", end = "")
+            print("")
+        print("")
