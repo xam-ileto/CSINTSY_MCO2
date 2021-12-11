@@ -56,6 +56,22 @@ class Board:
         # might need to use deep copy
         pass
 
+    def next_piece_moves():
+        # shows the next possible immediate moves for a chosen piece
+        # calls istilevalid
+        pass
+
+    def _is_tile_valid():
+        # checks if a passed position goes out of bounds
+        pass
+
+    def _piece_in_pos(self, row, col):
+        for piece in self.pieces:
+            if piece.col == col and piece.row == row:
+                return piece
+        
+        return None
+
     def choose_move():
         # calls _next_user_moves
         pass
@@ -65,8 +81,16 @@ class Board:
         for i in range(0, 8):
             if(i == 0):
                 print("     0    1    2    3    4    5    6    7")
-            print(str(i + 1) + "  ", end = "")
+            print(str(i) + "  ", end = "")
             for j in range(0, 8):
-                print("|   |", end = "")
+                
+                # print piece in tile
+                # print("row " + str(i))
+                # print("col " + str(j))
+                piece = self._piece_in_pos(i, j)
+                if  piece != None:
+                    print(piece.name, end = "")
+                else:
+                    print("|   |", end = "")
             print("")
         print("")
