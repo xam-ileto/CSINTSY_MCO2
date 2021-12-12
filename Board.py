@@ -112,7 +112,7 @@ class Board:
             
             # else if there is a piece of opposite color, check diagonal tile
             # if no piece in diagonal tile, add to possible moves
-            elif self._is_enemy_piece(piece_in_diagonal, player_color):
+            elif piece_in_diagonal._is_enemy_piece(player_color):
                 if position == "UL":
                     skip_coordinates = self._get_diagonal("UL", coordinate_row, coordinate_col)
                 elif position == "UR":
@@ -142,14 +142,6 @@ class Board:
         
         # return true if within bounds
         return True
-    
-    def _is_enemy_piece(self, piece, player_color):
-        # pass string of current team color
-        # checks if passed piece is enemy of current player
-        if piece.color != player_color:
-            return True
-        
-        return False
 
     def _piece_in_pos(self, row, col):
         for piece in self.pieces:
