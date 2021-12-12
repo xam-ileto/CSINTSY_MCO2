@@ -11,6 +11,4 @@ class Piece:
         self.col = col
 
     def make_king(self):
-        # adds K to the end of name and turns piece into king
-        self.name = self.name + "K"
         self.is_king = True

@@ -1,5 +1,4 @@
 from Piece import Piece
-from collections import defaultdict
 
 class Board:
     def __init__(self, *args):
@@ -75,27 +74,29 @@ class Board:
 
         # if piece is king, check 4 diagonal tiles
         # if the diagonal tile has a piece, check the diagonal of the tile
-        possible_king_tiles = []
+        possible_king_tiles = {}
         # upper left tile
-        possible_king_tiles.append([row - 1, col - 1])
+        possible_king_tiles["UL"] = self._get_diagonal("UL", row, col)
         # upper right
-        possible_king_tiles.append([row - 1, col + 1])
+        possible_king_tiles["UR"] = self._get_diagonal("UR", row, col)
         # lower left
-        possible_king_tiles.append([row + 1, col - 1])
+        possible_king_tiles["LL"] = self._get_diagonal("LL", row, col)
         # lower right
-        possible_king_tiles.append([row + 1, col + 1])
+        possible_king_tiles["LR"] = self._get_diagonal("LR", row, col)
 
         for position in possible_king_tiles:
+            print(position)
             # if position is not valid, continue (no need to check)
-            if self._is_tile_valid(position[0], position[1]) == False:
-                continue
+            # if self._is_tile_valid(position[0], position[1]) == False:
+            #     continue
 
             # if no piece in tile, add to possible moves
-            if  self._piece_in_pos != None:
-                possible_moves.append(position)
+            # if  self._piece_in_pos != None:
+            #     possible_moves.append(position)
             
             # if there is a piece, check diagonal tile
-            
+            # if no piece in diagonal tile, add to possible moves
+            # baka might want to store in a dictionary nalang?
         
 
     def _is_tile_valid(row, col):
@@ -115,6 +116,7 @@ class Board:
         return None
 
     def get_piece(self, name):
+        # this does not take into account if the piece is a king
         for piece in self.pieces:
             if piece.name == name:
                 return piece
@@ -136,6 +138,7 @@ class Board:
 
     def choose_move():
         # calls _next_user_moves
+        # need to tell user to omit the K when inputting if the piece is a king
         pass
     
     def print_board(self):
@@ -145,16 +148,18 @@ class Board:
                 print("     0    1    2    3    4    5    6    7")
             print(str(i) + "  ", end = "")
             for j in range(0, 8):
-                
+
                 # print piece in tile
                 piece = self._piece_in_pos(i, j)
                 if  piece != None:
-                    print("|" + piece.name, end = "")
-
                     name = piece.name
-                    if len(piece.name) == 3:
+                    if piece.is_king == True:
+                        name += "K"
+
+                    print("|" + name, end = "")
+                    if len(name) == 3:
                         print(" ", end = "")
-                    elif len(piece.name) == 2:
+                    elif len(name) == 2:
                         print("  ", end = "")
                 else:
                     print("|    ", end = "")

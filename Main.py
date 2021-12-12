@@ -3,5 +3,9 @@ from Board import Board
 b = Board("Start")
 b.print_board()
 
-b.pieces[0].make_king()
+b.get_piece("W1").make_king()
+
+b.get_piece("W1").move(4,3)
+b.get_piece("R2").move(3,0)
+b.get_piece("R3").move(4,0)
 b.print_board()
