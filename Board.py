@@ -67,52 +67,63 @@ class Board:
 
     def next_piece_moves(self, piece):
         # shows the next possible immediate moves for a chosen piece
-        # calls istilevalid
+        # calls _is_tile_valid
 
         possible_moves = []
         row = piece.row
         col = piece.col
         player_color = piece.color
 
+        possible_tiles = {}
         if piece.is_king:
             # if piece is king, check 4 diagonal tiles
             # if the diagonal tile has a piece, check the diagonal of the tile
-            possible_king_tiles = {}
             # upper left tile
-            possible_king_tiles["UL"] = self._get_diagonal("UL", row, col)
+            possible_tiles["UL"] = self._get_diagonal("UL", row, col)
             # upper right
-            possible_king_tiles["UR"] = self._get_diagonal("UR", row, col)
+            possible_tiles["UR"] = self._get_diagonal("UR", row, col)
             # lower left
-            possible_king_tiles["LL"] = self._get_diagonal("LL", row, col)
+            possible_tiles["LL"] = self._get_diagonal("LL", row, col)
             # lower right
-            possible_king_tiles["LR"] = self._get_diagonal("LR", row, col)
+            possible_tiles["LR"] = self._get_diagonal("LR", row, col)
+        else: # piece is not a king
+            if player_color == "White":
+                # lower left
+                possible_tiles["LL"] = self._get_diagonal("LL", row, col)
+                # lower right
+                possible_tiles["LR"] = self._get_diagonal("LR", row, col)
+            else: # player_color == "Red"
+                # upper left tile
+                possible_tiles["UL"] = self._get_diagonal("UL", row, col)
+                # upper right
+                possible_tiles["UR"] = self._get_diagonal("UR", row, col)
+        
+        for position, coordinate in possible_tiles.items():
+            # if position is not valid, continue (no need to check)
+            coordinate_row = coordinate[0]
+            coordinate_col = coordinate[1]
+            if self._is_tile_valid(coordinate_row, coordinate_col) == False:
+                continue
 
-            for position, coordinate in possible_king_tiles.items():
-                # if position is not valid, continue (no need to check)
-                coordinate_row = coordinate[0]
-                coordinate_col = coordinate[1]
-                if self._is_tile_valid(coordinate_row, coordinate_col) == False:
-                    continue
-
-                # if no piece in tile, add to possible moves
-                piece_in_diagonal = self._piece_in_pos(coordinate_row, coordinate_col)
-                if  piece_in_diagonal == None:
-                    possible_moves.append(coordinate)
-                
-                # else if there is a piece of opposite color, check diagonal tile
-                # if no piece in diagonal tile, add to possible moves
-                elif self._is_enemy_piece(piece_in_diagonal, player_color):
-                    if position == "UL":
-                        skip_coordinates = self._get_diagonal("UL", row, col)
-                    elif position == "UR":
-                        skip_coordinates = self._get_diagonal("UR", row, col)
-                    elif position == "LL":
-                        skip_coordinates = self._get_diagonal("LL", row, col)
-                    elif position == "LR":
-                        skip_coordinates = self._get_diagonal("LR", row, col)
+            # if no piece in tile, add to possible moves
+            piece_in_diagonal = self._piece_in_pos(coordinate_row, coordinate_col)
+            if  piece_in_diagonal == None:
+                possible_moves.append(coordinate)
             
-                    if self._piece_in_pos(skip_coordinates[0], skip_coordinates[1]) == None:
-                        possible_moves.append(coordinate)
+            # else if there is a piece of opposite color, check diagonal tile
+            # if no piece in diagonal tile, add to possible moves
+            elif self._is_enemy_piece(piece_in_diagonal, player_color):
+                if position == "UL":
+                    skip_coordinates = self._get_diagonal("UL", row, col)
+                elif position == "UR":
+                    skip_coordinates = self._get_diagonal("UR", row, col)
+                elif position == "LL":
+                    skip_coordinates = self._get_diagonal("LL", row, col)
+                elif position == "LR":
+                    skip_coordinates = self._get_diagonal("LR", row, col)
+        
+                if self._piece_in_pos(skip_coordinates[0], skip_coordinates[1]) == None:
+                    possible_moves.append(coordinate)
                 
         
         # return the list of possible moves
