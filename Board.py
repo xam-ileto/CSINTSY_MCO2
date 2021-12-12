@@ -113,17 +113,18 @@ class Board:
             # else if there is a piece of opposite color, check diagonal tile
             # if no piece in diagonal tile, add to possible moves
             elif self._is_enemy_piece(piece_in_diagonal, player_color):
-                print("enemy in diagonal")
-                print(position)
                 if position == "UL":
                     skip_coordinates = self._get_diagonal("UL", coordinate_row, coordinate_col)
                 elif position == "UR":
                     skip_coordinates = self._get_diagonal("UR", coordinate_row, coordinate_col)
                 elif position == "LL":
                     skip_coordinates = self._get_diagonal("LL", coordinate_row, coordinate_col)
-                    print("skip coordinates: " + str(skip_coordinates))
                 elif position == "LR":
                     skip_coordinates = self._get_diagonal("LR", coordinate_row, coordinate_col)
+
+                # if skip_coordinates is not valid, continue
+                if self._is_tile_valid(skip_coordinates[0], skip_coordinates[1]) == False:
+                    continue
 
                 if self._piece_in_pos(skip_coordinates[0], skip_coordinates[1]) == None:
                     possible_moves.append(skip_coordinates)
