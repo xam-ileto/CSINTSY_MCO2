@@ -65,14 +65,47 @@ class Board:
         
         return pieces
 
-    def next_piece_moves():
+    def next_piece_moves(self, piece):
         # shows the next possible immediate moves for a chosen piece
         # calls istilevalid
-        pass
 
-    def _is_tile_valid():
+        possible_moves = []
+        row = piece.row
+        col = piece.col
+
+        # if piece is king, check 4 diagonal tiles
+        # if the diagonal tile has a piece, check the diagonal of the tile
+        possible_king_tiles = []
+        # upper left tile
+        possible_king_tiles.append([row - 1, col - 1])
+        # upper right
+        possible_king_tiles.append([row - 1, col + 1])
+        # lower left
+        possible_king_tiles.append([row + 1, col - 1])
+        # lower right
+        possible_king_tiles.append([row + 1, col + 1])
+
+        for position in possible_king_tiles:
+            # if position is not valid, continue (no need to check)
+            if self._is_tile_valid(position[0], position[1]) == False:
+                continue
+
+            # if no piece in tile, add to possible moves
+            if  self._piece_in_pos != None:
+                possible_moves.append(position)
+            
+            # if there is a piece, check diagonal tile
+            
+        
+
+    def _is_tile_valid(row, col):
         # checks if a passed position goes out of bounds
-        pass
+        if row < 0 or row > 7 or col < 0 or col > 7:
+            # return false if out of bounds
+            return False
+        
+        # return true if within bounds
+        return True
 
     def _piece_in_pos(self, row, col):
         for piece in self.pieces:
@@ -85,6 +118,21 @@ class Board:
         for piece in self.pieces:
             if piece.name == name:
                 return piece
+
+    def _get_diagonal(diagonal, row, col):
+        # diagonal is a code for what diagonal to get
+        # UL = upper left, UR = upper right, LL = lower left, LR = lower right
+        # returns list with positions
+
+        if diagonal == "UL":
+            return [row - 1, col - 1]
+        elif diagonal == "UR":
+            return [row - 1, col + 1]
+        elif diagonal == "LL":
+            return [row + 1, col - 1]
+        elif diagonal == "LR":
+            return [row + 1, col + 1]
+
 
     def choose_move():
         # calls _next_user_moves
