@@ -200,7 +200,6 @@ class Board:
 
             print("we are looking at piece " + piece.name)
 
-            ctr = 0
             for move in self.next_piece_moves(piece):
                 # create node and starting board
                 start_node = NodeUserMoves(piece.name, self, root_row, root_col)
@@ -209,75 +208,13 @@ class Board:
                 print("move: " + str(move[0]) + " " + str(move[1]))
 
                 new_board = Board(self)
-                print("piece original location " + str(start_node.board_moves[0].get_piece(piece.name).row) + " " + str(start_node.board_moves[0].get_piece(piece.name).col) )
 
                 new_board.simulate_move(new_board.get_piece(piece.name), move[0], move[1])
                 
                 start_node.add_move(new_board, move[0], move[1])
-                print("R3 location: " + str(new_board.get_piece("R3").row) + " " + str(new_board.get_piece("R3").col))
-                new_board.print_board()
-                ctr +=1
-
-                
-                if piece.name == "R3":
-                    print("--------------R3-----------------")
-                    print("R3 position in board 1: " + str(start_node.board_moves[0].get_piece("R3").row) + " " + str(start_node.board_moves[0].get_piece("R3").col))
-                    print("R3 position in board 2: " + str(start_node.board_moves[1].get_piece("R3").row) + " " + str(start_node.board_moves[1].get_piece("R3").col))
-                print("")
-            
-            continue
-            moves_nonfinal = self.next_piece_moves(piece)
-            number_of_moves = len(moves_nonfinal)
-            print(moves_nonfinal)
-            for i in range(0, number_of_moves):
-                # create node and starting board
-                start_node = NodeUserMoves(piece.name, self, root_row, root_col)
-                stack.append(start_node)
-                # add next move to the node
-                print("move: " + str(moves_nonfinal[i][0]) + " " + str(moves_nonfinal[i][1]))
-
-                new_board = Board(self)
-                new_board.simulate_move(new_board.get_piece(piece.name))
-
-                print("piece original location " + str(start_node.moved_piece.row) + " " + str(start_node.moved_piece.col))
-                new_board.simulate_move(start_node.moved_piece, moves_nonfinal[i][0],moves_nonfinal[i][1])
-                start_node.add_move(new_board, moves_nonfinal[i][0], moves_nonfinal[i][1])
-                print("R3 location: " + str(new_board.get_piece("R3").row) + " " + str(new_board.get_piece("R3").col))
-                new_board.print_board()
-                
-
-
-            continue
-            # this is the old code
-            # check the possible moves for each movable piece
-            for move in self.next_piece_moves(piece):
-
-                # create node and starting board
-                start_node = NodeUserMoves(piece, self, root_row, root_col)
-                stack.append(start_node)
-                # add next move to the node
-                print("move: " + str(move[0]) + " " + str(move[1]))
-                new_board = Board(self)
-                print("piece original location " + str(piece.row) + " " + str(piece.col))
-                new_board.simulate_move(piece, move[0],move[1])
-                start_node.add_move(new_board, move[0], move[1])
-                print("R3 location: " + str(new_board.get_piece("R3").row) + " " + str(new_board.get_piece("R3").col))
                 new_board.print_board()
             
-            print("")
-            
             continue
-            # for debugging
-            for node in stack:
-                node.print_node()
-                print(len(node.board_moves))
-                node.get_final_board().print_board()
-
-            # break
-            continue
-
-            
-            print("number of possible moves: " + str(len(stack)))
             # TO DO
             while(len(stack) != 0): # while there are still explorable nodes, keep exploring
                 current_node = stack.pop()
@@ -355,16 +292,10 @@ class Board:
         is_skip = self._check_is_skip(piece, row)
 
         moving_to_position = self._check_which_diagonal(piece, row, col)
-        print(moving_to_position)
-        print("is skip? " + str(is_skip))
-        print("og row " + str(current_row))
-        print("new row " + str(row))
 
         if (is_skip):
             # eat enemy
             eaten_piece_row, eaten_piece_col = self._get_inner_diagonal(moving_to_position, current_row, current_col)
-            print(eaten_piece_row)
-            print(eaten_piece_col)
             eaten_piece = self._piece_in_pos(eaten_piece_row, eaten_piece_col)
             self._eat_piece(eaten_piece)
 
@@ -372,8 +303,6 @@ class Board:
             for i in range(0, 2):
                 current_row, current_col = self._get_inner_diagonal(moving_to_position, current_row, current_col)
 
-            print("moving piece to " + str(current_row) + " " + str(current_col))
-            print("current row, current col: " + str(current_row) + " " + str(current_col))
             piece.move(current_row, current_col)
         
         # if not a skip
