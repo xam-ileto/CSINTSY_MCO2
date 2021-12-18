@@ -252,7 +252,35 @@ class Board:
                         new_node.add_move(new_board, move[0], move[1])
                         stack.appendleft(new_node)
             
-            # print final moves
+        # get force player to only have options for highest move per piece
+        movable_pieces = [] # stores string of names only
+        for node in final_possible_moves:
+            if (node.moved_piece not in movable_pieces):
+                movable_pieces.append(node.moved_piece)
+        temp = []
+        print(movable_pieces)
+        for name in movable_pieces:
+            nodes = []
+            for node in final_possible_moves:
+                if (node.moved_piece == name):
+                    nodes.append(node)
+
+            max = 0
+            maxnode = nodes[0]
+            
+            for node in nodes:
+                if (len(node.piece_moves) > max):
+                    max = len(node.piece_moves)
+            
+            for node in nodes:
+                if len(node.piece_moves) == max:
+                    temp.append(maxnode)
+        
+        
+        final_possible_moves = temp
+            
+
+        # print final moves
         print("------FINAL POSSIBLE MOVES------------")
         for moves in final_possible_moves:
             moves.print_node()
