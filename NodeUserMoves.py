@@ -12,7 +12,13 @@ class NodeUserMoves:
     def get_final_board(self):
         return self.board_moves[-1]
     
+    def get_final_move(self):
+        return self.piece_moves[-1]
+    
     def add_move(self, board, row, col):
         self.board_moves.append(board)
         position = [row, col]
         self.piece_moves.append(position)
+    
+    def print_node(self):
+        print("node: " + self.moved_piece.name)

@@ -1,14 +1,17 @@
 from Piece import Piece
+from collections import deque
+from NodeUserMoves import NodeUserMoves
+from copy import deepcopy
 
 class Board:
     def __init__(self, *args):
-
+        # if user passes a string, then call _init_start
         if isinstance(args[0], str):
             self._init_start()
-
-        pass
-    # if user passes true, then call _init_start
-    # else (if user passes a board), set board to be this
+        # else (if user passes a board), set board to be this
+        else:
+            self._init_this(args[0])
+    
 
     def _init_start(self):
         self.pieces = []
@@ -51,9 +54,8 @@ class Board:
         self.remaining_white_kings = 0
             
 
-    def _init_this():
-        # might need to use deep copy
-        pass
+    def _init_this(self, board):
+        self = deepcopy(board)
 
     def pieces_of_color(self, color):
         # returns pieces of specific color
@@ -142,6 +144,9 @@ class Board:
         
         # return true if within bounds
         return True
+    
+    def _eat_piece(self, piece):
+        self.pieces.remove(piece)
 
     def _piece_in_pos(self, row, col):
         for piece in self.pieces:
@@ -169,6 +174,138 @@ class Board:
             return [row + 1, col - 1]
         elif diagonal == "LR":
             return [row + 1, col + 1]
+
+    def _next_user_moves(self, player_pieces):
+        final_possible_moves = []
+        movable_pieces = []
+
+        # check which pieces can possibly move
+        for piece in player_pieces:
+            if self.next_piece_moves(piece) != []:
+                movable_pieces.append(piece)
+
+    
+        # find moves for movable pieces
+        for piece in movable_pieces:
+            root_row = piece.row
+            root_col = piece.col
+            board = deepcopy(self)
+            
+            stack = deque() 
+
+            # check the possible moves for each movable piece
+            for move in self.next_piece_moves(piece):
+                # create a node and set starting board and position
+                move_node = NodeUserMoves(piece, self, move[0], move[1])
+                # add node to the stack
+                stack.append(move_node)
+            
+            # for debugging
+            for node in stack:
+                node.print_node()
+            
+            print("number of possible moves: " + str(len(stack)))
+            # TO DO
+            while(len(stack) != 0): # while there are still explorable nodes, keep exploring
+                current_node = stack.pop()
+                print("checking node for move " + str(current_node.get_final_move()[0]) + " " + str(current_node.get_final_move()[1]))
+                current_board = current_node.get_final_board()
+                current_row = current_node.get_final_move()[0]
+                current_col = current_node.get_final_move()[1]
+
+                
+                print("is next_piece_moves empty: " + str(len(current_board.next_piece_moves(current_board.get_piece(current_node.moved_piece.name))) == 0))
+                # if next_piece_moves is empty && row, col are different from root row col,
+                # add move to node and add to final_possible_moves, then pop from stack
+                if (current_board.next_piece_moves(current_board.get_piece(current_node.moved_piece.name)) == []):
+                    print("this node still has possible moves")
+
+                # else, add move to node and add to stack
+                else:
+                    print("piece " + current_node.moved_piece.name + " has no more possible moves")
+
+                # do for everything
+            print("")
+        
+    def _get_inner_diagonal(self, position, row, col):
+        # pass position of tile (ex. "UR"/"UL")
+        if position == "UL":
+            row = row - 1
+            col = col - 1
+        elif position == "UR":
+            row = row - 1
+            col = col + 1
+        elif position == "LL":
+            row = row + 1
+            col = col - 1
+        else: # position == "UR"
+            row = row + 1
+            col = col + 1
+
+        # returns immediate inner tile in that position
+        return row, col
+    
+    def _check_is_skip(self, piece, row):
+        if (row  == piece.row - 2 or row == piece.row + 2):
+            return True
+        
+        # else
+        return False
+    
+    def _check_which_diagonal(self, piece, row, col):
+        current_row = piece.row
+        current_col = piece.col
+
+        # returns string of position of tile (ex. "UR"/"UL")
+        # thsi is regardless if inner or outer position
+        if (row < current_row and col < current_col):
+            return "UL"
+        elif (row < current_row  and col > current_col):
+            return "UR"
+        elif (row > current_row and col < current_col ):
+            return "LL"
+        else:
+            return "LR"
+    
+    def simulate_move(self, piece, row, col):
+        # TO DO
+        # test this function
+        current_row = piece.row
+        current_col = piece.col
+        is_skip = self._check_is_skip(piece, row)
+
+        moving_to_position = self._check_which_diagonal(piece, row, col)
+        print(moving_to_position)
+
+        if (is_skip):
+            # eat enemy
+            eaten_piece_row, eaten_piece_col = self._get_inner_diagonal(moving_to_position, current_row, current_col)
+            print(eaten_piece_row)
+            print(eaten_piece_col)
+            eaten_piece = self._piece_in_pos(eaten_piece_row, eaten_piece_col)
+            self._eat_piece(eaten_piece)
+
+            # move current piece
+            for i in range(0, 2):
+                current_row, current_col = self._get_inner_diagonal(moving_to_position, current_row, current_col)
+
+            piece.move(current_row, current_col)
+        
+        # if not a skip
+        else:
+            current_row, current_col = self._get_inner_diagonal(moving_to_position, current_row, current_col)
+
+            piece.move(current_row, current_col)
+
+                    
+
+
+
+            
+
+                
+            
+
 
 
     def choose_move():
