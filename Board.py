@@ -278,6 +278,8 @@ class Board:
         
         
         final_possible_moves = temp
+
+        final_possible_moves = list(dict.fromkeys(final_possible_moves))
             
 
         # print final moves
