@@ -55,7 +55,12 @@ class Board:
             
 
     def _init_this(self, board):
-        self = deepcopy(board)
+        # copies passed board into self
+        self.pieces = board.pieces
+        self.remaining_red = board.remaining_red
+        self.remaining_white = board.remaining_white
+        self.remaining_red_kings = board.remaining_red_kings
+        self.remaining_white_kings = board.remaining_white_kings
 
     def pieces_of_color(self, color):
         # returns pieces of specific color
@@ -195,14 +200,23 @@ class Board:
 
             # check the possible moves for each movable piece
             for move in self.next_piece_moves(piece):
-                # create a node and set starting board and position
-                move_node = NodeUserMoves(piece, self, move[0], move[1])
-                # add node to the stack
-                stack.append(move_node)
+                # create node and starting board
+                start_node = NodeUserMoves(piece, self, root_row, root_col)
+                stack.append(start_node)
+                # add next move to the node
+                new_board = Board(self)
+                board.simulate_move(piece, move[0],move[1])
+                start_node.add_move(new_board, move[0], move[1])
+                new_board.print_board()
             
             # for debugging
             for node in stack:
                 node.print_node()
+                print(len(node.board_moves))
+                # node.get_final_board().print_board()
+
+            break
+
             
             print("number of possible moves: " + str(len(stack)))
             # TO DO
@@ -212,6 +226,14 @@ class Board:
                 current_board = current_node.get_final_board()
                 current_row = current_node.get_final_move()[0]
                 current_col = current_node.get_final_move()[1]
+
+                print("this is the current board")
+                current_board.print_board()
+
+                print("simulating next move")
+                # simulate the next board with next move
+                # next_board = Board(self)
+                # next_board.simulate_move(current_node.piece, )
 
                 
                 print("is next_piece_moves empty: " + str(len(current_board.next_piece_moves(current_board.get_piece(current_node.moved_piece.name))) == 0))
@@ -268,8 +290,7 @@ class Board:
             return "LR"
     
     def simulate_move(self, piece, row, col):
-        # TO DO
-        # test this function
+        # function moves selected piece and also eats enemy if piece skips a tile when moving to row and col
         current_row = piece.row
         current_col = piece.col
         is_skip = self._check_is_skip(piece, row)
@@ -296,16 +317,6 @@ class Board:
             current_row, current_col = self._get_inner_diagonal(moving_to_position, current_row, current_col)
 
             piece.move(current_row, current_col)
-
-                    
-
-
-
-            
-
-                
-            
-
 
 
     def choose_move():

@@ -1,3 +1,4 @@
+from copy import deepcopy
 from typing import Text
 from Board import Board
 
@@ -10,7 +11,4 @@ b.get_piece("W3").move(1,5)
 
 b.print_board()
 
-p = b.get_piece("R3")
-b.simulate_move(p, 2,6)
-b.print_board()
-# b._next_user_moves(b.pieces_of_color("Red"))
+b._next_user_moves(b.pieces_of_color("Red"))
