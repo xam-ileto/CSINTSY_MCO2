@@ -2,7 +2,8 @@ from copy import deepcopy
 
 class NodeUserMoves:
     def __init__(self, piece, board, row, col):
-        self.moved_piece = deepcopy(piece)
+        # moved_piece is the name of the passed piece
+        self.moved_piece = piece
         self.board_moves = []
         self.piece_moves = []
 
@@ -22,3 +23,7 @@ class NodeUserMoves:
     
     def print_node(self):
         print("node: " + self.moved_piece.name)
+
+        for moves in self.piece_moves:
+            print("[" + str(moves[0]) + "," + str(moves[1]) + "],  ", end ='')
+        print("")

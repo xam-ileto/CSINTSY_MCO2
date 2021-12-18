@@ -11,4 +11,5 @@ b.get_piece("W3").move(1,5)
 
 b.print_board()
 
+
 b._next_user_moves(b.pieces_of_color("Red"))
