@@ -1,7 +1,9 @@
+import itertools
 from Piece import Piece
 from collections import deque
 from NodeUserMoves import NodeUserMoves
 from copy import deepcopy
+from itertools import filterfalse
 
 class Board:
     def __init__(self, *args):
@@ -205,7 +207,7 @@ class Board:
                 start_node = NodeUserMoves(piece.name, self, root_row, root_col)
                 stack.append(start_node)
                 # add next move to the node
-                print("move: " + str(move[0]) + " " + str(move[1]))
+                
 
                 new_board = Board(self)
 
@@ -214,36 +216,50 @@ class Board:
                 start_node.add_move(new_board, move[0], move[1])
                 new_board.print_board()
             
-            continue
-            # TO DO
+            
             while(len(stack) != 0): # while there are still explorable nodes, keep exploring
-                current_node = stack.pop()
-                print("checking node for move " + str(current_node.get_final_move()[0]) + " " + str(current_node.get_final_move()[1]))
+                current_node = stack.popleft()
+                print("move: " + str(current_node.get_final_move()[0]) + " " + str(current_node.get_final_move()[1]))
                 current_board = current_node.get_final_board()
+                current_piece = current_board.get_piece(piece.name)
                 current_row = current_node.get_final_move()[0]
                 current_col = current_node.get_final_move()[1]
 
-                print("this is the current board")
-                current_board.print_board()
+                # check next possible moves if any of them skip
+                print("current piece location  " + str(current_piece.row) + " " + str(current_piece.col))
+                unfiltered_next_possible_moves = current_board.next_piece_moves(current_piece)
+                next_possible_moves = []
+                for move in unfiltered_next_possible_moves:
+                    skipCheck = self._check_is_skip(current_piece, move[0])
+                    if skipCheck == True:
+                        next_possible_moves.append(move)
+                # results in next_possible_moves containing the possible moves for this current node
 
-                print("simulating next move")
-                # simulate the next board with next move
-                # next_board = Board(self)
-                # next_board.simulate_move(current_node.piece, )
+                has_no_moves = len(next_possible_moves) == 0
+                # if next_piece_moves is empty 
+                # add to final_possible_moves
+                if (has_no_moves):
+                    print("piece can no longer move")
+                    final_possible_moves.append(current_node)
 
-                
-                print("is next_piece_moves empty: " + str(len(current_board.next_piece_moves(current_board.get_piece(current_node.moved_piece.name))) == 0))
-                # if next_piece_moves is empty && row, col are different from root row col,
-                # add move to node and add to final_possible_moves, then pop from stack
-                if (current_board.next_piece_moves(current_board.get_piece(current_node.moved_piece.name)) == []):
-                    print("this node still has possible moves")
-
-                # else, add move to node and add to stack
+                # else, create nodes for next possible moves and add to stack
                 else:
-                    print("piece " + current_node.moved_piece.name + " has no more possible moves")
+                    print("piece can still move")
+                    for move in next_possible_moves:
+                        new_node = deepcopy(current_node)
+                        new_board = Board(current_board)
+                        new_board.simulate_move(new_board.get_piece(piece.name), move[0], move[1])
+                        new_node.add_move(new_board, move[0], move[1])
+                        stack.appendleft(new_node)
+            
+            # print final moves
+        print("------FINAL POSSIBLE MOVES------------")
+        for moves in final_possible_moves:
+            moves.print_node()
+        
+        return final_possible_moves
 
-                # do for everything
-            print("")
+                 
         
     def _get_inner_diagonal(self, position, row, col):
         # pass position of tile (ex. "UR"/"UL")
@@ -269,6 +285,7 @@ class Board:
         
         # else
         return False
+    
     
     def _check_which_diagonal(self, piece, row, col):
         current_row = piece.row

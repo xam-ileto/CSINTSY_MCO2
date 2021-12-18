@@ -22,7 +22,7 @@ class NodeUserMoves:
         self.piece_moves.append(position)
     
     def print_node(self):
-        print("node: " + self.moved_piece.name)
+        print("node: " + self.moved_piece)
 
         for moves in self.piece_moves:
             print("[" + str(moves[0]) + "," + str(moves[1]) + "],  ", end ='')
