@@ -4,6 +4,7 @@ class NodeUserMoves:
     def __init__(self, piece, board, row, col):
         # moved_piece is the name of the passed piece
         self.moved_piece = piece
+        self.board = None # is default placed to None until initialized
         self.board_moves = []
         self.piece_moves = []
 
@@ -11,13 +12,13 @@ class NodeUserMoves:
         self.add_move(deepcopy(board), row, col)
     
     def get_final_board(self):
-        return self.board_moves[-1]
+        return self.board
     
     def get_final_move(self):
         return self.piece_moves[-1]
     
     def add_move(self, board, row, col):
-        self.board_moves.append(board)
+        self.board = board
         position = [row, col]
         self.piece_moves.append(position)
     
