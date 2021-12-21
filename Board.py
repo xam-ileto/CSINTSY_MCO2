@@ -200,8 +200,6 @@ class Board:
             
             stack = deque() 
 
-            print("we are looking at piece " + piece.name)
-
             for move in self.next_piece_moves(piece):
                 # create node and starting board
                 start_node = NodeUserMoves(piece.name, self, root_row, root_col)
@@ -214,19 +212,16 @@ class Board:
                 new_board.simulate_move(new_board.get_piece(piece.name), move[0], move[1])
                 
                 start_node.add_move(new_board, move[0], move[1])
-                new_board.print_board()
             
             
             while(len(stack) != 0): # while there are still explorable nodes, keep exploring
                 current_node = stack.popleft()
-                print("move: " + str(current_node.get_final_move()[0]) + " " + str(current_node.get_final_move()[1]))
                 current_board = current_node.get_final_board()
                 current_piece = current_board.get_piece(piece.name)
                 current_row = current_node.get_final_move()[0]
                 current_col = current_node.get_final_move()[1]
 
                 # check next possible moves if any of them skip
-                print("current piece location  " + str(current_piece.row) + " " + str(current_piece.col))
                 unfiltered_next_possible_moves = current_board.next_piece_moves(current_piece)
                 next_possible_moves = []
                 for move in unfiltered_next_possible_moves:
@@ -239,12 +234,10 @@ class Board:
                 # if next_piece_moves is empty 
                 # add to final_possible_moves
                 if (has_no_moves):
-                    print("piece can no longer move")
                     final_possible_moves.append(current_node)
 
                 # else, create nodes for next possible moves and add to stack
                 else:
-                    print("piece can still move")
                     for move in next_possible_moves:
                         new_node = deepcopy(current_node)
                         new_board = Board(current_board)
@@ -258,7 +251,6 @@ class Board:
             if (node.moved_piece not in movable_pieces):
                 movable_pieces.append(node.moved_piece)
         temp = []
-        print(movable_pieces)
         for name in movable_pieces:
             nodes = []
             for node in final_possible_moves:
@@ -281,12 +273,6 @@ class Board:
 
         final_possible_moves = list(dict.fromkeys(final_possible_moves))
             
-
-        # print final moves
-        print("------FINAL POSSIBLE MOVES------------")
-        for moves in final_possible_moves:
-            moves.print_node()
-        
         return final_possible_moves
 
                  
