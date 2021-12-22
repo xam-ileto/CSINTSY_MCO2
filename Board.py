@@ -345,10 +345,25 @@ class Board:
             piece.move(current_row, current_col)
 
 
-    def choose_move():
-        # calls _next_user_moves
-        # need to tell user to omit the K when inputting if the piece is a king
-        pass
+    def choose_move(self, final_moves):
+        # asks player to input user move choice
+        print("-----POSSIBLE MOVES-----")
+        choice_number = 0
+        for move in final_moves:
+            print("-- Choice " + str(choice_number))
+            move.print_node()
+            choice_number += 1
+        
+        print("")
+        user_choice = int(input("Input choice: "))
+
+        # loop to deal with incorrect user input
+        while user_choice not in range(0, choice_number):
+            print("Choice not in options! Please try again.")
+            user_choice = int(input("Input choice: "))
+
+        # return node corresponding to choice
+        return final_moves[user_choice]
     
     def print_board(self):
         print("---BOARD---")

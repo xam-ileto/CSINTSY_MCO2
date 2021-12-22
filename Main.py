@@ -13,4 +13,5 @@ b._eat_piece(b.get_piece("R6"))
 b.print_board()
 
 
-b._next_user_moves(b.pieces_of_color("White"))
+node = b.choose_move(b._next_user_moves(b.pieces_of_color("White")))
+node.print_node()
