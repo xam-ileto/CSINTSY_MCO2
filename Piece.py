@@ -10,6 +10,10 @@ class Piece:
         self.row = row
         self.col = col
 
+        # turns piece into king if piece at edge
+        if (row == 0 and self.color == "Red" or row == 7 and self.color == "White"):
+            self.make_king()
+
     def make_king(self):
         self.is_king = True
 

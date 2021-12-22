@@ -5,13 +5,8 @@ from Board import Board
 b = Board("Start")
 
 # positions R3 so it can jump
-b.get_piece("R3").move(3,4)
-b.get_piece("R2").move(3,2)
-b.get_piece("R1").move(5,2)
-b._eat_piece(b.get_piece("R6"))
+b.get_piece("R3").move(0,0)
+print(b.get_piece("R3").is_king)
+b.get_piece("W1").move(7,7)
+print(b.get_piece("W1").is_king)
 
-b.print_board()
-
-
-node = b.choose_move(b._next_user_moves(b.pieces_of_color("White")))
-node.print_node()
