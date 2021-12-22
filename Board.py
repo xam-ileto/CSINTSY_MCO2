@@ -359,6 +359,7 @@ class Board:
 
         # loop to deal with incorrect user input
         while user_choice not in range(0, choice_number):
+            print("")
             print("Choice not in options! Please try again.")
             user_choice = int(input("Input choice: "))
 
