@@ -1,9 +1,8 @@
-import itertools
+from typing import final
 from Piece import Piece
 from collections import deque
 from NodeUserMoves import NodeUserMoves
 from copy import deepcopy
-from itertools import filterfalse
 
 class Board:
     def __init__(self, *args):
@@ -48,21 +47,11 @@ class Board:
                 new_piece = Piece(name, row, col, "Red")
                 self.pieces.append(new_piece)
                 redcount += 1
-        
-        # set remaining piece values
-        self.remaining_red = 12
-        self.remaining_white = 12
-        self.remaining_red_kings = 0
-        self.remaining_white_kings = 0
             
 
     def _init_this(self, board):
         # copies passed board into self
         self.pieces = deepcopy(board.pieces)
-        self.remaining_red = deepcopy(board.remaining_red)
-        self.remaining_white = deepcopy(board.remaining_white)
-        self.remaining_red_kings = deepcopy(board.remaining_red_kings)
-        self.remaining_white_kings = deepcopy(board.remaining_white_kings)
 
     def pieces_of_color(self, color):
         # returns pieces of specific color
@@ -183,6 +172,7 @@ class Board:
             return [row + 1, col + 1]
 
     def _next_user_moves(self, player_pieces):
+        # returns final possible moves for the player
         final_possible_moves = []
         movable_pieces = []
 
@@ -196,14 +186,18 @@ class Board:
         for piece in movable_pieces:
             root_row = piece.row
             root_col = piece.col
-            board = deepcopy(self)
             
             stack = deque() 
 
             for move in self.next_piece_moves(piece):
                 # create node and starting board
                 start_node = NodeUserMoves(piece.name, self, root_row, root_col)
-                stack.append(start_node)
+
+                # if a skip, add to the stack
+                if start_node.get_final_board()._check_is_skip(start_node.get_final_board().get_piece(start_node.moved_piece), move[0]):
+                    stack.append(start_node)
+                else:
+                    final_possible_moves.append(start_node)
                 # add next move to the node
                 
 
@@ -250,13 +244,13 @@ class Board:
         for node in final_possible_moves:
             if (node.moved_piece not in movable_pieces):
                 movable_pieces.append(node.moved_piece)
+
         temp = []
         for name in movable_pieces:
             nodes = []
             for node in final_possible_moves:
                 if (node.moved_piece == name):
                     nodes.append(node)
-
             max = 0
             maxnode = nodes[0]
             
@@ -266,12 +260,10 @@ class Board:
             
             for node in nodes:
                 if len(node.piece_moves) == max:
-                    temp.append(maxnode)
+                    temp.append(node)
         
         
         final_possible_moves = temp
-
-        final_possible_moves = list(dict.fromkeys(final_possible_moves))
             
         return final_possible_moves
 
@@ -390,3 +382,18 @@ class Board:
                     print("|    ", end = "")
             print("|")
         print("")
+
+    def check_game_over(self, color_turn):
+        # checks if board is game over or not
+        # color_turn passes the string of the color of the pieces we're checking
+        if color_turn == "White":
+            enemy_color = "Red"
+        else:
+            enemy_color = "White"
+        game_over = True
+
+        possible_moves = self._next_user_moves(self.pieces_of_color(color_turn))
+
+        for move in possible_moves:
+            move.print_node()
+        pass
