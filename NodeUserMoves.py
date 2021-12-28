@@ -5,8 +5,8 @@ class NodeUserMoves:
         # moved_piece is the name of the passed piece
         self.moved_piece = piece
         self.board = None # is default placed to None until initialized
-        self.board_moves = []
         self.piece_moves = []
+        self.is_last_move_skip = False
 
         # add starting move
         self.add_move(deepcopy(board), row, col)
@@ -18,9 +18,13 @@ class NodeUserMoves:
         return self.piece_moves[-1]
     
     def add_move(self, board, row, col):
+        if self.board != None:
+            self.is_last_move_skip = self.board._check_is_skip(self.board.get_piece(self.moved_piece), row)
+
         self.board = board
         position = [row, col]
         self.piece_moves.append(position)
+
     
     def print_node(self):
         print("node: " + self.moved_piece)

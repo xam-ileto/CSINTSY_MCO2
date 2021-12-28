@@ -235,36 +235,49 @@ class Board:
                     for move in next_possible_moves:
                         new_node = deepcopy(current_node)
                         new_board = Board(current_board)
+                        # TO DO
                         new_board.simulate_move(new_board.get_piece(piece.name), move[0], move[1])
                         new_node.add_move(new_board, move[0], move[1])
                         stack.appendleft(new_node)
-            
-        # get force player to only have options for highest move per piece
-        movable_pieces = [] # stores string of names only
-        for node in final_possible_moves:
-            if (node.moved_piece not in movable_pieces):
-                movable_pieces.append(node.moved_piece)
+        
+        # find the longest possible move
+        move_lengths = [len(node.piece_moves) for node in final_possible_moves]
+        max_length = max(list(move_lengths))
+        print("max len: " + str(max_length))
+        
+        # remove moves less than the maximum
+        final_possible_moves = [move for move in final_possible_moves if len(move.piece_moves) >= max_length]
 
-        temp = []
-        for name in movable_pieces:
-            nodes = []
-            for node in final_possible_moves:
-                if (node.moved_piece == name):
-                    nodes.append(node)
-            max = 0
-            maxnode = nodes[0]
+        # if max length is 2 and there is at least one skip and one normal move, only keep skips
+        if max_length == 2:
+            print("max is 2")
+            skip_count = 0
+            normal_count = 0
+
+            print("skip checking")
+            for move in final_possible_moves:
+                supposed_board = move.board
+                supposed_move = move.get_final_move()
+
+                print("checking move " + move.moved_piece)
+                move.get_final_board().print_board()
+                print("moved row")
+                if move.is_last_move_skip:
+                    print("is a skip")
+                    skip_count += 1
+                else:
+                    print("normal move")
+                    normal_count += 1
             
-            for node in nodes:
-                if (len(node.piece_moves) > max):
-                    max = len(node.piece_moves)
-            
-            for node in nodes:
-                if len(node.piece_moves) == max:
-                    temp.append(node)
-        
-        
-        final_possible_moves = temp
-            
+            print("skip count")
+            print(skip_count)
+            print("normal")
+            print(normal_count)
+
+            if skip_count > 0 and normal_count > 0:
+                print("im here")
+                final_possible_moves = [move for move in final_possible_moves if move.is_last_move_skip]
+
         return final_possible_moves
 
                  
@@ -300,7 +313,7 @@ class Board:
         current_col = piece.col
 
         # returns string of position of tile (ex. "UR"/"UL")
-        # thsi is regardless if inner or outer position
+        # this is regardless if inner or outer position
         if (row < current_row and col < current_col):
             return "UL"
         elif (row < current_row  and col > current_col):
@@ -394,6 +407,14 @@ class Board:
 
         possible_moves = self._next_user_moves(self.pieces_of_color(color_turn))
 
-        for move in possible_moves:
-            move.print_node()
+        for color_move in possible_moves:
+            color_move_board = color_move.board
+
+            # for each move, generate opponent moves
+            enemy_moves = color_move_board._next_user_moves(color_move_board.pieces_of_color(enemy_color))
+
+            color_move_board.print_board()
+            # simulate all enemy moves
+            for enemy_move in enemy_moves:
+                enemy_move.print_node()
         pass
