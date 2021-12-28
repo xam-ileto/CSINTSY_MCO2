@@ -243,39 +243,24 @@ class Board:
         # find the longest possible move
         move_lengths = [len(node.piece_moves) for node in final_possible_moves]
         max_length = max(list(move_lengths))
-        print("max len: " + str(max_length))
         
         # remove moves less than the maximum
         final_possible_moves = [move for move in final_possible_moves if len(move.piece_moves) >= max_length]
 
         # if max length is 2 and there is at least one skip and one normal move, only keep skips
         if max_length == 2:
-            print("max is 2")
             skip_count = 0
             normal_count = 0
 
-            print("skip checking")
             for move in final_possible_moves:
                 supposed_board = move.board
                 supposed_move = move.get_final_move()
-
-                print("checking move " + move.moved_piece)
-                move.get_final_board().print_board()
-                print("moved row")
                 if move.is_last_move_skip:
-                    print("is a skip")
                     skip_count += 1
                 else:
-                    print("normal move")
                     normal_count += 1
-            
-            print("skip count")
-            print(skip_count)
-            print("normal")
-            print(normal_count)
 
             if skip_count > 0 and normal_count > 0:
-                print("im here")
                 final_possible_moves = [move for move in final_possible_moves if move.is_last_move_skip]
 
         return final_possible_moves
