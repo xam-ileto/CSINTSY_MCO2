@@ -235,7 +235,6 @@ class Board:
                     for move in next_possible_moves:
                         new_node = deepcopy(current_node)
                         new_board = Board(current_board)
-                        # TO DO
                         new_board.simulate_move(new_board.get_piece(piece.name), move[0], move[1])
                         new_node.add_move(new_board, move[0], move[1])
                         stack.appendleft(new_node)
@@ -253,8 +252,6 @@ class Board:
             normal_count = 0
 
             for move in final_possible_moves:
-                supposed_board = move.board
-                supposed_move = move.get_final_move()
                 if move.is_last_move_skip:
                     skip_count += 1
                 else:
