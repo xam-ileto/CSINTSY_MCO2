@@ -1,3 +1,4 @@
+from copy import deepcopy
 from Board import Board
 
 class Game:
@@ -17,4 +18,4 @@ class Game:
         move = self.current_board.choose_move(self.current_board._next_user_moves(self.current_board.pieces_of_color(color)))
 
         # perform the move and change the board
-        self.current_board = move.board
+        self.current_board = deepcopy(move.board)

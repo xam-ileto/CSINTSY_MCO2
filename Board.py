@@ -380,54 +380,5 @@ class Board:
             print("|")
         print("")
 
-    def check_game_over(self, color_turn):
-        # checks if board is game over or not
-        # color_turn passes the string of the color of the pieces we're checking
-        print("we are checking game over for color " + color_turn)
-
-        
-
-        if color_turn == "White":
-            enemy_color = "Red"
-        else:
-            enemy_color = "White"
-        game_over = True
-        current_board = deepcopy(self)
-        print("This is the current board we are checking")
-        current_board.print_board()
-
-        # generate and simulate player's next possible moves
-        possible_moves = self._next_user_moves(self.pieces_of_color(color_turn))
-
-        for color_move in possible_moves:
-            print("color move")
-            color_move.print_node()
-            color_move_board = color_move.board
-            current_board = deepcopy(color_move_board)
-
-            print("board of color move")
-            current_board.print_board()
-
-            # for each move, generate opponent moves
-            enemy_moves = current_board._next_user_moves(current_board.pieces_of_color(enemy_color))
-            print("my move")
-            current_board.print_board()
-            # simulate all enemy moves
-            print("enemy moves:")
-            for enemy_move in enemy_moves:
-                current_board = deepcopy(color_move_board)
-                print("enemy simulating move:")
-                enemy_move.print_node()
-
-                # simulate the enemy move
-                current_board.simulate_move(current_board.get_piece(enemy_move.moved_piece), enemy_move.get_final_move()[0],  enemy_move.get_final_move()[1])
-                print("this is the enemy board")
-                current_board.print_board()
-
-
-                # if the current piece is uneaten, then game over is false
-                remaining_pieces = [piece.name for piece in current_board.pieces]
-                if (color_move.moved_piece in remaining_pieces):
-                    game_over = False
-        
-        return game_over
+    def check_game_over_old(self, color_turn):
+        pass
