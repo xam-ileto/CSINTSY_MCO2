@@ -386,17 +386,32 @@ class Board:
         else:
             enemy_color = "White"
         game_over = True
+        current_board = deepcopy(self)
 
         possible_moves = self._next_user_moves(self.pieces_of_color(color_turn))
 
         for color_move in possible_moves:
             color_move_board = color_move.board
+            current_board = color_move_board
 
             # for each move, generate opponent moves
             enemy_moves = color_move_board._next_user_moves(color_move_board.pieces_of_color(enemy_color))
-
-            color_move_board.print_board()
+            # print("my move")
+            # color_move_board.print_board()
             # simulate all enemy moves
+            # print("enemy moves:")
             for enemy_move in enemy_moves:
-                enemy_move.print_node()
-        pass
+                # enemy_move.print_node()
+
+                # simulate the enemy move
+                current_board.simulate_move(current_board.get_piece(enemy_move.moved_piece), enemy_move.get_final_move()[0],  enemy_move.get_final_move()[1])
+                # print("this is the enemy board")
+                # current_board.print_board()
+
+
+                # if the current piece is uneaten, then game over is false
+                remaining_pieces = [piece.name for piece in current_board.pieces]
+                if (color_move.moved_piece in remaining_pieces):
+                    game_over = False
+        
+        return game_over
