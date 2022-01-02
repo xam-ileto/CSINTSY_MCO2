@@ -359,6 +359,14 @@ class Board:
         self.white_pieces = white
         self.white_kings = white_kings
         self.red_kings = red_kings
+    
+    def print_stats(self):
+        '''prints stats for debugging purposes'''
+        print("Board stats:")
+        print("red: " + str(self.red_pieces))
+        print("white: " + str(self.white_pieces))
+        print("red kings: " + str(self.red_kings))
+        print("white kings: " + str(self.white_kings))
 
 
     def choose_move(self, final_moves):
