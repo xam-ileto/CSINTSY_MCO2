@@ -15,6 +15,10 @@ class Board:
     
 
     def _init_start(self):
+        self.red_pieces = 12
+        self.white_pieces = 12
+        self.red_kings = self.white_kings = 0
+        
         self.pieces = []
 
         # generate list of starting positions with pieces
@@ -51,6 +55,8 @@ class Board:
 
     def _init_this(self, board):
         # copies passed board into self
+        self.red_pieces = deepcopy(board.red_pieces)
+        self.white_pieces = deepcopy(board.white_pieces)
         self.pieces = deepcopy(board.pieces)
 
     def pieces_of_color(self, color):
@@ -330,6 +336,29 @@ class Board:
             current_row, current_col = self._get_inner_diagonal(moving_to_position, current_row, current_col)
 
             piece.move(current_row, current_col)
+    
+    def calculate_stats(self):
+        '''resets the values for the number of pieces of the board'''
+        red = 0
+        white = 0
+        red_kings = 0
+        white_kings = 0
+
+        for piece in self.pieces:
+            if piece.color == "White":
+                white += 1
+                if piece.is_king:
+                    white_kings += 1
+            else:
+                red += 1
+                if piece.is_king:
+                    red_kings += 1
+        
+        # reset the values
+        self.red_pieces = red
+        self.white_pieces = white
+        self.white_kings = white_kings
+        self.red_kings = red_kings
 
 
     def choose_move(self, final_moves):
@@ -380,5 +409,22 @@ class Board:
             print("|")
         print("")
 
-    def check_game_over_old(self, color_turn):
-        pass
+    def check_game_over(self, color_turn):
+        '''returns true if there are no more pieces left or all pieces are cornered'''
+        over = False
+
+        self.calculate_stats()
+
+
+        if color_turn == "White" and self.white_pieces == 0:
+            over = True
+        elif color_turn == "Red" and self.red_pieces == 0:
+            over = True
+        
+        try:
+            len(self._next_user_moves(self.pieces_of_color(color_turn)))
+        except:
+            # an error occured since there are no more moves
+            over = True
+
+        return over
