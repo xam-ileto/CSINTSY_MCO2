@@ -88,9 +88,9 @@ class AiNode:
     
     def print_node(self):
         '''prints node for debugging purposes'''
-        tab = ' ' * self.depth
+        tab = ' ' * self.depth * 5
         
         print(tab + "Node score: " + str(self.score))
         print(tab + "turn: " + self.turn)
-        self.board.print_board()
+        # self.board.print_board()
         
