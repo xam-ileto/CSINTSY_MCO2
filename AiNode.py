@@ -12,11 +12,11 @@ class AiNode:
     
     def add_children(self):
         '''generates the next possible nodes given the current board'''
-        for next_moves in self.board._next_user_moves(self.board.pieces_of_color(self.turn)):
-            if self.turn == "White":
-                next_color = "Red"
-            else:
-                next_color = "White"
+        if self.turn == "White":
+            next_color = "Red"
+        else:
+            next_color = "White"
+        for next_moves in self.board._next_user_moves(self.board.pieces_of_color(next_color)):
             
             next_moves.board.calculate_stats()
             new_node = AiNode(next_moves.board, self.depth + 1, next_color, next_moves.moved_piece)
