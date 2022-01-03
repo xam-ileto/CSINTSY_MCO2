@@ -82,8 +82,9 @@ class AiNode:
         
         return outcome + (white_pieces - red_pieces) * 1000
     
-    def sort_children():
-        pass
+    def sort_children_descending(self):
+        '''Sorts the children of this node in descending order for move ordering'''
+        self.children.sort(key = lambda x: x.score, reverse= True)
     
     def print_node(self):
         '''prints node for debugging purposes'''
