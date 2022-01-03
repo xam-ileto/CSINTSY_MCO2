@@ -11,7 +11,7 @@ class Tree:
             node.add_children()
     
     def minimax(self, node, depth, alpha, beta, turn, has_move_ordering):
-        print("at depth: " + str(depth))
+        # print("at depth: " + str(depth))
         # turn is either "White" or "Red" depending on whose turn it is
         
         # if minimax has move ordering, sort nodes in descending order
@@ -23,7 +23,8 @@ class Tree:
             return node
         
         if turn == "White":
-            print("at white")
+            # print("at white")
+            # print("a: " + str(alpha) + "   b: " + str(beta))
             maxEval = float('-inf')
             maxEval_node = node
             for child in node.children:
@@ -37,23 +38,26 @@ class Tree:
                 alpha = max(alpha, eval_node.score)
                 if beta <= alpha:
                     break
+            # print("a: " + str(alpha) + "   b: " + str(beta))
             return maxEval_node
         else: # if turn == "Red"
-            print("at red")
+            # print("at red")
+            # print("a: " + str(alpha) + "   b: " + str(beta))
             minEval = float('inf')
             minEval_node = node
             for child in node.children:
                 
                 eval_node = self.minimax(child, depth + 1, alpha, beta, "White", has_move_ordering)
                 # print(type(eval_node))
-                minEval = max(minEval, eval_node.score)
+                minEval = min(minEval, eval_node.score)
                 
                 if minEval == eval_node.score:
                     minEval_node.node = eval_node
                 
-                beta = max(beta, eval_node.score)
+                beta = min(beta, eval_node.score)
                 if beta <= alpha:
                     break
+            # print("a: " + str(alpha) + "   b: " + str(beta))
             return minEval_node
     
     def move_ordering(self):
