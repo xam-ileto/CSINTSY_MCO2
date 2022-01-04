@@ -40,28 +40,7 @@ class AiNode:
             
             
             # if AI can be eaten, -3
-            if piece.row + 1 > 7 or piece.row - 1 < 0 or piece.col + 1 > 7 or piece.col - 1 < 0:
-                continue
-            
-            piece_check = self.board._piece_in_pos(piece.row + 1, piece.col - 1)
-            if  piece_check != None: # if there is a piece in the position
-                if piece_check.color == "Red" and self.board._piece_in_pos(piece.row - 1, piece.col + 1) == None: # check if the piece is an enemy and if partnering tile is empty
-                    outcome -= 3
-            
-            piece_check = self.board._piece_in_pos(piece.row + 1, piece.col + 1)
-            if  piece_check != None: # if there is a piece in the position
-                if piece_check.color == "Red" and self.board._piece_in_pos(piece.row - 1, piece.col - 1) == None: # check if the piece is an enemy and if partnering tile is empty
-                    outcome -= 3
-            
-            piece_check = self.board._piece_in_pos(piece.row - 1, piece.col - 1)
-            if  piece_check != None: # if there is a piece in the position
-                if piece_check.color == "Red" and piece_check.is_king and self.board._piece_in_pos(piece.row + 1, piece.col + 1) == None: # check if the piece is an enemy and if partnering tile is empty, check also if king
-                    outcome -= 3
-            
-            piece_check = self.board._piece_in_pos(piece.row - 1, piece.col + 1)
-            if  piece_check != None: # if there is a piece in the position
-                if piece_check.color == "Red" and piece_check.is_king and self.board._piece_in_pos(piece.row + 1, piece.col - 1) == None: # check if the piece is an enemy and if partnering tile is empty, check also if king
-                    outcome -= 3
+            outcome -= self.board.can_be_eaten(piece.name) * 3
             
             # if AI can eat, plus 6
             if piece.row + 2 > 7 or piece.row -2 < 0:

@@ -454,11 +454,8 @@ class Board:
             over = True
         elif color_turn == "Red" and self.red_pieces == 0:
             over = True
-        
-        try:
-            len(self._next_user_moves(self.pieces_of_color(color_turn)))
-        except:
-            # an error occured since there are no more moves
+
+        if self._next_user_moves(self.pieces_of_color(color_turn)) == []:
             over = True
 
         return over
