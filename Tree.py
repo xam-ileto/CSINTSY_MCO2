@@ -3,16 +3,22 @@ from AiNode import AiNode
 class Tree:
     def __init__(self, root):
         self.root = root
-        self.move_ordering_counter = 0
+        self.ordering_counter = 0
+        self.no_ordering_counter = 0
         
         # creates a tree with a depth of 3 (based on MP specs)
         root.add_children()
         for node in root.children:
             node.add_children()
     
-    def minimax(self, node, depth, alpha, beta, turn):
+    def minimax(self, node, depth, alpha, beta, turn, counter):
         # print("at depth: " + str(depth))
         # turn is either "White" or "Red" depending on whose turn it is
+        
+        if counter == True:
+            self.ordering_counter += 1
+        else:
+            self.no_ordering_counter += 1
         
         if depth == 2 or node.board.check_game_over(turn):
             # print("returned a " + str(type(node)))
@@ -24,7 +30,7 @@ class Tree:
             maxEval = float('-inf')
             maxEval_node = node
             for child in node.children:
-                eval_node = self.minimax(child, depth + 1, alpha, beta, "Red")
+                eval_node = self.minimax(child, depth + 1, alpha, beta, "Red", counter)
                 # print(type(eval_node))
                 maxEval = max(maxEval, eval_node.score)
                 
@@ -43,7 +49,7 @@ class Tree:
             minEval_node = node
             for child in node.children:
                 
-                eval_node = self.minimax(child, depth + 1, alpha, beta, "White")
+                eval_node = self.minimax(child, depth + 1, alpha, beta, "White", counter)
                 # print(type(eval_node))
                 minEval = min(minEval, eval_node.score)
                 
@@ -57,14 +63,11 @@ class Tree:
             return minEval_node
     
     def move_ordering(self):
-        '''orders all nodes of tree in descending order'''
-        self.root.sort_children_descending()
+        '''sorts depth 3 nodes in descending order'''
+        # self.root.sort_children_descending()
         
-        for depth2_node in self.root.children:
-            depth2_node.sort_children_descending()
-            
-            for depth3_node in depth2_node.children:
-                depth3_node.sort_children_descending()
+        for depth1_node in self.root.children:
+            depth1_node.sort_children_descending()
     
     def print_tree(self):
         self.root.print_node()
