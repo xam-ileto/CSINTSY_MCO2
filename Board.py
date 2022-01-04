@@ -367,6 +367,26 @@ class Board:
         print("white: " + str(self.white_pieces))
         print("red kings: " + str(self.red_kings))
         print("white kings: " + str(self.white_kings))
+    
+    def can_be_eaten(self, piece_name):
+        '''checks if passed piece can be eaten by an enemy'''
+        piece = self.get_piece(piece_name)
+        
+        if piece.color == "Red":
+            enemy_color = "White"
+        else:
+            enemy_color = "Red"
+        
+        possible_moves = self._next_user_moves(self.pieces_of_color(enemy_color))
+        
+        for move in possible_moves:
+            remaining_pieces = [piece.name for piece in move.board.pieces]
+            
+            # can be eaten
+            if piece_name not in remaining_pieces:
+                return True
+        
+        return False
 
 
     def choose_move(self, final_moves):
