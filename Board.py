@@ -247,6 +247,11 @@ class Board:
         
         # find the longest possible move
         move_lengths = [len(node.piece_moves) for node in final_possible_moves]
+        
+        # if there are no possible moves, return an empty list
+        if len(move_lengths) == 0:
+            return []
+        
         max_length = max(list(move_lengths))
         
         # remove moves less than the maximum
