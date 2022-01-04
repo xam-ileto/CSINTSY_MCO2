@@ -374,7 +374,8 @@ class Board:
         print("white kings: " + str(self.white_kings))
     
     def can_be_eaten(self, piece_name):
-        '''checks if passed piece can be eaten by an enemy'''
+        '''returns how many times a piece can be eaten by an enemy'''
+        count = 0
         piece = self.get_piece(piece_name)
         
         if piece.color == "Red":
@@ -389,9 +390,9 @@ class Board:
             
             # can be eaten
             if piece_name not in remaining_pieces:
-                return True
+                count += 1
         
-        return False
+        return count
 
 
     def choose_move(self, final_moves):

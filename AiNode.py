@@ -91,6 +91,7 @@ class AiNode:
         tab = ' ' * self.depth * 5
         
         print(tab + "Node score: " + str(self.score))
+        print(tab + "Node depth: " + str(self.depth))
         print(tab + "turn: " + self.turn)
-        # self.board.print_board()
+        self.board.print_board()
         
