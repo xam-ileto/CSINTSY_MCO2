@@ -27,8 +27,14 @@ class NodeUserMoves:
 
     
     def print_node(self):
-        print("node: " + self.moved_piece)
+        print("piece: " + self.moved_piece)
 
+        print("moves: ", end ='')
         for moves in self.piece_moves:
-            print("[" + str(moves[0]) + "," + str(moves[1]) + "],  ", end ='')
+            if moves == self.piece_moves[0]:
+                continue
+            elif moves != self.piece_moves[-1]:
+                print(str(moves) + ",  ", end ='')
+            else:
+                print(str(moves), end ='')
         print("")
