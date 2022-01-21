@@ -12,17 +12,19 @@ class Tree:
             node.add_children()
     
     def minimax(self, node, depth, alpha, beta, turn, counter):
-        # print("at depth: " + str(depth))
+        print("at depth: " + str(depth))
         # turn is either "White" or "Red" depending on whose turn it is
         
-        if counter == True:
-            self.ordering_counter += 1
-        else:
-            self.no_ordering_counter += 1
-        
-        if depth == 2 or node.board.check_game_over(turn):
-            # print("returned a " + str(type(node)))
-            return node
+        # only counts the nodes at depth 2
+        if node.depth == 2:
+            if counter == True:
+                self.ordering_counter += 1
+            else:
+                self.no_ordering_counter += 1
+            
+            if depth == 2 or node.board.check_game_over(turn):
+                # print("returned a " + str(type(node)))
+                return node
         
         if turn == "White":
             # print("at white")
