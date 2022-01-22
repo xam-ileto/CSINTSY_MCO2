@@ -12,7 +12,7 @@ class Tree:
             node.add_children()
     
     def minimax(self, node, depth, alpha, beta, turn, counter):
-        print("at depth: " + str(depth))
+        # print("at depth: " + str(depth))
         # turn is either "White" or "Red" depending on whose turn it is
         
         # only counts the nodes at depth 2

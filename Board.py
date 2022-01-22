@@ -398,6 +398,7 @@ class Board:
     def choose_move(self, final_moves):
         # asks player to input user move choice
         print("-----POSSIBLE MOVES-----")
+        print("note: moves are represented as [row, column]")
         choice_number = 0
         for move in final_moves:
             print("-- Choice " + str(choice_number))
