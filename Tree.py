@@ -12,8 +12,8 @@ class Tree:
         # turn is either "White" or "Red" depending on whose turn it is
         
         # generate children
-        print("depth: " + str(node.depth))
-        if node.depth < self.max_depth:
+        # print("depth: " + str(node.depth))
+        if node.depth < self.max_depth and node.children == []:
             node.add_children()
         
         # node.print_node()
@@ -57,12 +57,13 @@ class Tree:
                     break
             return minEval_node
     
-    def move_ordering(self):
+    def move_ordering(self, visited, node):
         '''sorts all nodes in descending order'''
-        self.root.sort_children_descending()
-        
-        for depth1_node in self.root.children:
-            depth1_node.sort_children_descending()
+        if node not in visited:
+            node.sort_children_descending()
+            visited.append(node)
+            for child in node.children:
+                self.move_ordering(visited, child)
     
     def print_tree(self, visited, node):
         if node not in visited:

@@ -26,13 +26,19 @@ class Game:
             tree = Tree(root, 2)
             
             move = tree.minimax(root, 0, -10000, 10000, "White", False)
-            print("Without move ordering: " + str(tree.no_ordering_counter))
-            # tree.move_ordering()
-            # move = tree.minimax(root, 0, -10000, 10000, "White", True)
-            # print("With move ordering: " + str(tree.ordering_counter))
-            
             visited = []
             tree.print_tree(visited, tree.root)
+            print("Without move ordering: " + str(tree.no_ordering_counter))
+            visited = []
+            print('-----MOVE ORDERING---------')
+            tree.move_ordering(visited, tree.root)
+            move = tree.minimax(root, 0, -10000, 10000, "White", True)
+            visited = []
+            tree.print_tree(visited, tree.root)
+            print("With move ordering: " + str(tree.ordering_counter))
+            
+            # visited = []
+            # tree.print_tree(visited, tree.root)
 
         # perform the move and change the board
         self.current_board = deepcopy(move.board)
