@@ -58,25 +58,27 @@ class Tree:
                     break
             return minEval_node
     
-    def move_ordering(self, visited, node):
+    def move_ordering(self, visited_nodes, node):
         '''sorts all nodes in descending order'''
-        if node not in visited:
+        if node not in visited_nodes:
             node.sort_children_descending()
-            visited.append(node)
+            visited_nodes.append(node)
             for child in node.children:
-                self.move_ordering(visited, child)
+                self.move_ordering(visited_nodes, child)
     
-    def count_nodes(self, visited, node):
-        if node not in visited:
+    def count_nodes(self, visited_nodes, node):
+        '''counts the total number of nodes'''
+        if node not in visited_nodes:
             self.number_of_nodes += 1
-            visited.append(node)
+            visited_nodes.append(node)
             for child in node.children:
-                self.count_nodes(visited, child)
+                self.count_nodes(visited_nodes, child)
     
-    def print_tree(self, visited, node):
-        if node not in visited:
+    def print_tree(self, visited_nodes, node):
+        '''For debugging purposes: prints tree using DFS'''
+        if node not in visited_nodes:
             node.print_node()
-            visited.append(node)
+            visited_nodes.append(node)
             for child in node.children:
-                self.print_tree(visited, child)
+                self.print_tree(visited_nodes, child)
         

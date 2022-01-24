@@ -41,11 +41,11 @@ class Game:
             tree.count_nodes(visited, tree.root)
             print("num of nodes: " + str(tree.number_of_nodes))
             
-            tree.root.board.print_board()
-            tree.root.children[0].board.print_board()
-            tree.root.children[0].children[0].board.print_board()
-            tree.root.children[0].children[0].children[0].board.print_board()
-            tree.root.children[0].children[0].children[0].children[0].board.print_board()
+            # tree.root.board.print_board()
+            # tree.root.children[0].board.print_board()
+            # tree.root.children[0].children[0].board.print_board()
+            # tree.root.children[0].children[0].children[0].board.print_board()
+            # tree.root.children[0].children[0].children[0].children[0].board.print_board()
             
             # visited = []
             # tree.print_tree(visited, tree.root)
