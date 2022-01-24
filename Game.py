@@ -23,13 +23,16 @@ class Game:
             # if white turn
             print("AI is calculating next move...")
             root = AiNode(self.current_board, 0, "Red", None)
-            tree = Tree(root)
+            tree = Tree(root, 2)
             
             move = tree.minimax(root, 0, -10000, 10000, "White", False)
             print("Without move ordering: " + str(tree.no_ordering_counter))
-            tree.move_ordering()
-            move = tree.minimax(root, 0, -10000, 10000, "White", True)
-            print("With move ordering: " + str(tree.ordering_counter))
+            # tree.move_ordering()
+            # move = tree.minimax(root, 0, -10000, 10000, "White", True)
+            # print("With move ordering: " + str(tree.ordering_counter))
+            
+            visited = []
+            tree.print_tree(visited, tree.root)
 
         # perform the move and change the board
         self.current_board = deepcopy(move.board)
