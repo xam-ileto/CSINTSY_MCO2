@@ -23,19 +23,29 @@ class Game:
             # if white turn
             print("AI is calculating next move...")
             root = AiNode(self.current_board, 0, "Red", None)
-            tree = Tree(root, 2)
+            tree = Tree(root, 4)
             
             move = tree.minimax(root, 0, -10000, 10000, "White", False)
             visited = []
-            tree.print_tree(visited, tree.root)
-            print("Without move ordering: " + str(tree.no_ordering_counter))
+            # tree.print_tree(visited, tree.root)
+            
             visited = []
             print('-----MOVE ORDERING---------')
             tree.move_ordering(visited, tree.root)
             move = tree.minimax(root, 0, -10000, 10000, "White", True)
             visited = []
             tree.print_tree(visited, tree.root)
+            print("Without move ordering: " + str(tree.no_ordering_counter))
             print("With move ordering: " + str(tree.ordering_counter))
+            visited = []
+            tree.count_nodes(visited, tree.root)
+            print("num of nodes: " + str(tree.number_of_nodes))
+            
+            tree.root.board.print_board()
+            tree.root.children[0].board.print_board()
+            tree.root.children[0].children[0].board.print_board()
+            tree.root.children[0].children[0].children[0].board.print_board()
+            tree.root.children[0].children[0].children[0].children[0].board.print_board()
             
             # visited = []
             # tree.print_tree(visited, tree.root)

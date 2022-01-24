@@ -6,13 +6,14 @@ class Tree:
         self.ordering_counter = 0
         self.no_ordering_counter = 0
         self.max_depth = max_depth
+        self.number_of_nodes = 0
         
     
     def minimax(self, node, depth, alpha, beta, turn, has_move_ordering):
         # turn is either "White" or "Red" depending on whose turn it is
         
         # generate children
-        # print("depth: " + str(node.depth))
+        print("depth: " + str(node.depth))
         if node.depth < self.max_depth and node.children == []:
             node.add_children()
         
@@ -64,6 +65,13 @@ class Tree:
             visited.append(node)
             for child in node.children:
                 self.move_ordering(visited, child)
+    
+    def count_nodes(self, visited, node):
+        if node not in visited:
+            self.number_of_nodes += 1
+            visited.append(node)
+            for child in node.children:
+                self.count_nodes(visited, child)
     
     def print_tree(self, visited, node):
         if node not in visited:
