@@ -25,14 +25,14 @@ class Game:
             root = AiNode(self.current_board, 0, "Red", None)
             tree = Tree(root, 4)
             
-            move = tree.minimax(root, 0, -10000, 10000, "White", False)
+            move = tree.minimax(root, 0, -10000, 10000, "White")
             visited = []
             # tree.print_tree(visited, tree.root)
             
             visited = []
             print('-----MOVE ORDERING---------')
             tree.move_ordering(visited, tree.root)
-            move = tree.minimax(root, 0, -10000, 10000, "White", True)
+            move = tree.minimax(root, 0, -10000, 10000, "White")
             visited = []
             tree.print_tree(visited, tree.root)
             print("Without move ordering: " + str(tree.no_ordering_counter))
