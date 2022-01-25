@@ -393,6 +393,44 @@ class Board:
                 count += 1
         
         return count
+    
+    def calculate_score(self):
+        outcome = 0
+        white_pieces = self.white_pieces
+        red_pieces = self.red_pieces
+        
+        for piece in self.pieces_of_color("White"):
+            if piece.is_king:
+                outcome += 8
+            else:
+                outcome += 5
+            
+            # if at edge, plus 7
+            if piece.row == 0 or piece.col == 0 or piece.row == 7 or piece.col == 7:
+                outcome += 7
+            
+            
+            # if AI can be eaten, -3
+            outcome -= self.can_be_eaten(piece.name) * 3
+            
+            # if AI can eat, plus 6
+            if piece.row + 2 > 7 or piece.row -2 < 0:
+                continue
+            
+            piece_check = self._piece_in_pos(piece.row + 1, piece.col - 1)
+            if  piece_check != None:
+                if piece_check.color == "Red" and self._piece_in_pos(piece.row + 2, piece.col - 2) == None:
+                    outcome += 6
+            
+            if piece.row + 2 > 7 or piece.col + 2 > 7:
+                continue
+                    
+            piece_check = self._piece_in_pos(piece.row + 1, piece.col + 1)
+            if  piece_check != None:
+                if piece_check.color == "Red" and self._piece_in_pos(piece.row + 2, piece.col + 2) == None:
+                    outcome += 6
+        
+        return outcome + (white_pieces - red_pieces) * 1000
 
 
     def choose_move(self, final_moves):

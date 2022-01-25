@@ -7,7 +7,7 @@ class AiNode:
         self.turn = color
         self.moved_piece = moved_piece # is None if root node
         
-        self.score = self.calculate_score()
+        self.score = self.board.calculate_score()
         self.children = []
     
     def add_children(self):
@@ -21,45 +21,6 @@ class AiNode:
             next_moves.board.calculate_stats()
             new_node = AiNode(next_moves.board, self.depth + 1, next_color, next_moves.moved_piece)
             self.children.append(new_node)
-    
-    def calculate_score(self):
-        '''calculates the score for the node'''
-        outcome = 0
-        white_pieces = self.board.white_pieces
-        red_pieces = self.board.red_pieces
-        
-        for piece in self.board.pieces_of_color("White"):
-            if piece.is_king:
-                outcome += 8
-            else:
-                outcome += 5
-            
-            # if at edge, plus 7
-            if piece.row == 0 or piece.col == 0 or piece.row == 7 or piece.col == 7:
-                outcome += 7
-            
-            
-            # if AI can be eaten, -3
-            outcome -= self.board.can_be_eaten(piece.name) * 3
-            
-            # if AI can eat, plus 6
-            if piece.row + 2 > 7 or piece.row -2 < 0:
-                continue
-            
-            piece_check = self.board._piece_in_pos(piece.row + 1, piece.col - 1)
-            if  piece_check != None:
-                if piece_check.color == "Red" and self.board._piece_in_pos(piece.row + 2, piece.col - 2) == None:
-                    outcome += 6
-            
-            if piece.row + 2 > 7 or piece.col + 2 > 7:
-                continue
-                    
-            piece_check = self.board._piece_in_pos(piece.row + 1, piece.col + 1)
-            if  piece_check != None:
-                if piece_check.color == "Red" and self.board._piece_in_pos(piece.row + 2, piece.col + 2) == None:
-                    outcome += 6
-        
-        return outcome + (white_pieces - red_pieces) * 1000
     
     def sort_children_descending(self):
         '''Sorts the children of this node in descending order for move ordering'''
