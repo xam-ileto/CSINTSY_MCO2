@@ -13,7 +13,7 @@ class Tree:
     def minimax(self, node, depth, alpha, beta, turn, has_move_ordering):
         # turn is either "White" or "Red" depending on whose turn it is
         
-        # generate children if node is non-leaf 
+        # generate children if node is non-leaf
         if node.depth < self.max_depth: # and node.children == []:
             node.add_children()
             
@@ -56,18 +56,6 @@ class Tree:
                 if beta <= alpha:
                     break
             return minEval_node
-    
-    # def move_ordering(self, visited_nodes, node):
-    #     '''sorts all nodes in descending order'''
-    #     print("len of visited: " + str(len(visited_nodes)))
-    #     if node not in visited_nodes and node.depth < self.max_depth:
-    #         print("we are sorting")
-    #         node.sort_children_descending()
-    #         visited_nodes.append(node)
-    #         print("number of children of current node: "  + str(len(node.children)))
-    #         for child in node.children:
-    #             print("this is a child")
-    #             self.move_ordering(visited_nodes, child)
     
     def count_nodes(self, visited_nodes, node):
         '''counts the total number of nodes'''
