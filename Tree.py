@@ -3,18 +3,23 @@ from AiNode import AiNode
 class Tree:
     def __init__(self, root, max_depth):
         self.root = root
+        # counter = for counting the number of nodes explored in minimax
         self.counter = 0
         self.max_depth = max_depth
+        # number_of_nodes = total number of nodes in the tree
         self.number_of_nodes = 0
         
     
-    def minimax(self, node, depth, alpha, beta, turn):
+    def minimax(self, node, depth, alpha, beta, turn, has_move_ordering):
         # turn is either "White" or "Red" depending on whose turn it is
         
-        # generate children
-        print("depth: " + str(node.depth))
-        if node.depth < self.max_depth and node.children == []:
+        # generate children if node is non-leaf 
+        if node.depth < self.max_depth: # and node.children == []:
             node.add_children()
+            
+            # if move ordering is specified, sort the children
+            if has_move_ordering:
+                node.sort_children_descending()
         
         self.counter += 1
             
@@ -26,7 +31,7 @@ class Tree:
             maxEval = float('-inf')
             maxEval_node = node
             for child in node.children:
-                eval_node = self.minimax(child, depth + 1, alpha, beta, "Red")
+                eval_node = self.minimax(child, depth + 1, alpha, beta, "Red", has_move_ordering)
                 maxEval = max(maxEval, eval_node.score)
                 
                 if maxEval == eval_node.score:
@@ -41,7 +46,7 @@ class Tree:
             minEval_node = node
             for child in node.children:
                 
-                eval_node = self.minimax(child, depth + 1, alpha, beta, "White")
+                eval_node = self.minimax(child, depth + 1, alpha, beta, "White", has_move_ordering)
                 minEval = min(minEval, eval_node.score)
                 
                 if minEval == eval_node.score:
@@ -52,13 +57,17 @@ class Tree:
                     break
             return minEval_node
     
-    def move_ordering(self, visited_nodes, node):
-        '''sorts all nodes in descending order'''
-        if node not in visited_nodes:
-            node.sort_children_descending()
-            visited_nodes.append(node)
-            for child in node.children:
-                self.move_ordering(visited_nodes, child)
+    # def move_ordering(self, visited_nodes, node):
+    #     '''sorts all nodes in descending order'''
+    #     print("len of visited: " + str(len(visited_nodes)))
+    #     if node not in visited_nodes and node.depth < self.max_depth:
+    #         print("we are sorting")
+    #         node.sort_children_descending()
+    #         visited_nodes.append(node)
+    #         print("number of children of current node: "  + str(len(node.children)))
+    #         for child in node.children:
+    #             print("this is a child")
+    #             self.move_ordering(visited_nodes, child)
     
     def count_nodes(self, visited_nodes, node):
         '''counts the total number of nodes'''
