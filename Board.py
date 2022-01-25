@@ -414,22 +414,32 @@ class Board:
             outcome -= self.can_be_eaten(piece.name) * 3
             
             # if AI can eat, plus 6
-            if piece.row + 2 > 7 or piece.row -2 < 0:
-                continue
+            if piece.row + 2 <= 7  and piece.col - 2 >= 0: 
+                piece_check = self._piece_in_pos(piece.row + 1, piece.col - 1)
+                if  piece_check != None:
+                    if piece_check.color == "Red" and self._piece_in_pos(piece.row + 2, piece.col - 2) == None:
+                        outcome += 6
             
-            piece_check = self._piece_in_pos(piece.row + 1, piece.col - 1)
-            if  piece_check != None:
-                if piece_check.color == "Red" and self._piece_in_pos(piece.row + 2, piece.col - 2) == None:
-                    outcome += 6
-            
-            if piece.row + 2 > 7 or piece.col + 2 > 7:
-                continue
+            if piece.row + 2 <= 7  and piece.col + 2 <= 7:   
+                piece_check = self._piece_in_pos(piece.row + 1, piece.col + 1)
+                if  piece_check != None:
+                    if piece_check.color == "Red" and self._piece_in_pos(piece.row + 2, piece.col + 2) == None:
+                        outcome += 6
                     
-            piece_check = self._piece_in_pos(piece.row + 1, piece.col + 1)
-            if  piece_check != None:
-                if piece_check.color == "Red" and self._piece_in_pos(piece.row + 2, piece.col + 2) == None:
-                    outcome += 6
-        
+            # if piece is king
+            if piece.is_king:
+                if piece.row - 2 >= 0  and piece.col - 2 >= 0:   
+                    piece_check = self._piece_in_pos(piece.row - 1, piece.col - 1)
+                    if  piece_check != None:
+                        if piece_check.color == "Red" and self._piece_in_pos(piece.row - 2, piece.col - 2) == None:
+                            outcome += 6
+                
+                if piece.row - 2 >= 0  and piece.col + 2 <= 7:  
+                    piece_check = self._piece_in_pos(piece.row - 1, piece.col + 1)
+                    if  piece_check != None:
+                        if piece_check.color == "Red" and self._piece_in_pos(piece.row - 2, piece.col + 2) == None:
+                            outcome += 6
+
         return outcome + (white_pieces - red_pieces) * 1000
 
 
