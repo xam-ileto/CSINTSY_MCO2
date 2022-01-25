@@ -11,6 +11,7 @@ class Tree:
         
     
     def minimax(self, node, depth, alpha, beta, turn, has_move_ordering):
+        '''performs the minimax algorithm and builds the tree as minimax is being performed'''
         # turn is either "White" or "Red" depending on whose turn it is
         
         # generate children if node is non-leaf

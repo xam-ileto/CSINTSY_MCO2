@@ -25,7 +25,7 @@ class Game:
             
             
             root = AiNode(self.current_board, 0, "Red", None)
-            no_ordering_tree = Tree(root, 4)
+            no_ordering_tree = Tree(root, 2)
             move = no_ordering_tree.minimax(root, 0, -10000, 10000, "White", False)
             visited = []
             no_ordering_tree.count_nodes(visited,no_ordering_tree.root)
@@ -37,7 +37,7 @@ class Game:
             
             print('-----MOVE ORDERING---------')
             root = AiNode(self.current_board, 0, "Red", None)
-            ordering_tree = Tree(root, 4)
+            ordering_tree = Tree(root, 2)
             move = ordering_tree.minimax(root, 0, -10000, 10000, "White", True)
             visited = []
             ordering_tree.print_tree(visited,ordering_tree.root)
