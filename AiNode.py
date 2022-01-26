@@ -1,5 +1,4 @@
 
-from Board import Board
 class AiNode:
     def __init__(self, board, depth, color, moved_piece):
         self.board = board
