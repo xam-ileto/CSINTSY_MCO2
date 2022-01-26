@@ -16,7 +16,7 @@ class AiNode:
             next_color = "Red"
         else:
             next_color = "White"
-        for next_moves in self.board._next_user_moves(self.board.pieces_of_color(next_color)):
+        for next_moves in self.board._next_user_moves(self.board.pieces_of_color(self.turn)):
             
             next_moves.board.calculate_stats()
             new_node = AiNode(next_moves.board, self.depth + 1, next_color, next_moves.moved_piece)

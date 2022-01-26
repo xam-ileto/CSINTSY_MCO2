@@ -451,6 +451,8 @@ class Board:
         for move in final_moves:
             print("-- Choice " + str(choice_number))
             move.print_node()
+            # TO DO
+            print("score: " + str(move.board.calculate_score()))
             choice_number += 1
         
         print("")
