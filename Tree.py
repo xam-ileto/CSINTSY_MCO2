@@ -33,15 +33,90 @@ class Tree:
             
             
         if depth == self.max_depth or node.board.check_game_over(turn):
+            return node, node.score
+        
+        if maximizer:
+            maxEval = float('-inf')
+            maxEval_node = node
+            # counter = 0
+            for child in node.children:
+                eval_node, score = self.minimax(child, depth + 1, alpha, beta, False, has_move_ordering)
+                print("compare to " + str(score))
+                # counter += 1
+                
+                original_maxEval = maxEval
+                maxEval = max(maxEval, score)
+                
+                # print("counter " + str(counter))
+                if maxEval == score and maxEval != original_maxEval:
+                    maxEval_node = eval_node
+                print("compare to " + str(score))
+                alpha = max(alpha, score)
+                if beta <= alpha:
+                    break
+                
+                print('at node  (s = ' + str(node.score) + ', d = ' + str(depth) + '): a = ' + str(alpha) + ', b = ' + str(beta))
+            # print(maxEval_node.board.print_board())
+            # print(maxEval_node.depth)
+            print("----------depth " + str(node.depth) + " final maximum score found: " + str(maxEval_node.score))
+            return maxEval_node, maxEval
+        else: # if turn == "Red" (original)
+            minEval = float('inf')
+            minEval_node = node
+            for child in node.children:
+                
+                eval_node, score = self.minimax(child, depth + 1, alpha, beta, True, has_move_ordering)
+                print("compare to " + str(score))
+                original_minEval = minEval
+                minEval = min(minEval, score)
+                # print("minimum score found: " + str(minEval))
+                # print("")
+                
+                if minEval == score and minEval != original_minEval:
+                    minEval_node.node = eval_node
+                print("compare to " + str(score))
+                beta = min(beta, score)
+                if beta <= alpha:
+                    break
+                
+                print('at node  (s = ' + str(node.score) + ', d = ' + str(depth) + '): a = ' + str(alpha) + ', b = ' + str(beta))
+            # print(minEval_node.board.print_board())
+            # print(minEval_node.depth)
+            print("----------depth " + str(node.depth) + " final minimum score found: " + str(minEval_node.score))
+            return minEval_node, minEval
+    
+    def minimax_730pm(self, node, depth, alpha, beta, maximizer, has_move_ordering):
+        '''performs the minimax algorithm and builds the tree as minimax is being performed'''
+        # turn is either "White" or "Red" depending on whose turn it is
+        if maximizer:
+            turn = "White"
+        else:
+            turn = "Red"
+        
+        
+        # generate children if node is non-leaf
+        if node.depth < self.max_depth: # and node.children == []:
+            node.add_children()
+            
+            # if move ordering is specified, sort the children
+            if has_move_ordering:
+                node.sort_children_descending()
+        
+        self.counter += 1
+        
+        # print('at node  (s = ' + str(node.score) + ', d = ' + str(depth) + '): a = ' + str(alpha) + ', b = ' + str(beta))
+            
+            
+        if depth == self.max_depth or node.board.check_game_over(turn):
             return node
         
         if maximizer:
-            print('in maximizer')
             maxEval = float('-inf')
             maxEval_node = node
             # counter = 0
             for child in node.children:
                 eval_node = self.minimax(child, depth + 1, alpha, beta, False, has_move_ordering)
+                print("compare to " + str(eval_node.score))
                 # counter += 1
                 
                 original_maxEval = maxEval
@@ -50,7 +125,7 @@ class Tree:
                 # print("counter " + str(counter))
                 if maxEval == eval_node.score and maxEval != original_maxEval:
                     maxEval_node = eval_node
-                
+                print("compare to " + str(eval_node.score))
                 alpha = max(alpha, eval_node.score)
                 if beta <= alpha:
                     break
@@ -58,16 +133,15 @@ class Tree:
                 print('at node  (s = ' + str(node.score) + ', d = ' + str(depth) + '): a = ' + str(alpha) + ', b = ' + str(beta))
             # print(maxEval_node.board.print_board())
             # print(maxEval_node.depth)
-            print("----------depth 0 final maximum score found: " + str(maxEval_node.score))
+            print("----------depth " + str(node.depth) + " final maximum score found: " + str(maxEval_node.score))
             return maxEval_node
         else: # if turn == "Red" (original)
-            print("in minimizer")
             minEval = float('inf')
             minEval_node = node
             for child in node.children:
                 
                 eval_node = self.minimax(child, depth + 1, alpha, beta, True, has_move_ordering)
-                # print("compare to " + str(eval_node.score))
+                print("compare to " + str(eval_node.score))
                 original_minEval = minEval
                 minEval = min(minEval, eval_node.score)
                 # print("minimum score found: " + str(minEval))
@@ -75,7 +149,7 @@ class Tree:
                 
                 if minEval == eval_node.score and minEval != original_minEval:
                     minEval_node.node = eval_node
-                
+                print("compare to " + str(eval_node.score))
                 beta = min(beta, eval_node.score)
                 if beta <= alpha:
                     break
@@ -83,8 +157,87 @@ class Tree:
                 print('at node  (s = ' + str(node.score) + ', d = ' + str(depth) + '): a = ' + str(alpha) + ', b = ' + str(beta))
             # print(minEval_node.board.print_board())
             # print(minEval_node.depth)
-            print("----------depth 1 final minimum score found: " + str(minEval_node.score))
+            print("----------depth " + str(node.depth) + " final minimum score found: " + str(minEval_node.score))
             return minEval_node
+        
+    def minimax_test(self, node, depth, alpha, beta, maximizer, has_move_ordering):
+        '''performs the minimax algorithm and builds the tree as minimax is being performed'''
+        # turn is either "White" or "Red" depending on whose turn it is
+        if maximizer:
+            turn = "White"
+        else:
+            turn = "Red"
+        
+        
+        # generate children if node is non-leaf
+        print("node depth: " + str(node.depth))
+        print("max depth: " + str(self.max_depth))
+        if node.depth < self.max_depth: # and node.children == []:
+            print("adding children")
+            node.add_children()
+            
+            # if move ordering is specified, sort the children
+            if has_move_ordering:
+                node.sort_children_descending()
+        print("number of children: " + str(len(node.children)))
+        self.counter += 1
+        
+        # print('at node  (s = ' + str(node.score) + ', d = ' + str(depth) + '): a = ' + str(alpha) + ', b = ' + str(beta))
+            
+        print("depth " + str(depth))
+        if depth == 0 or node.board.check_game_over(turn):
+            print("in if")
+            print('score ' + str(node.score))
+            return node, node.score
+        
+        if maximizer:
+            maxEval = float('-inf')
+            maxEval_node = node
+            # counter = 0
+            for child in node.children:
+                eval_node, score = self.minimax_test(child, depth - 1, alpha, beta, False, has_move_ordering)
+                # counter += 1
+                
+                original_maxEval = maxEval
+                maxEval = max(maxEval, score)
+                
+                # print("counter " + str(counter))
+                if maxEval == score and maxEval != original_maxEval:
+                    maxEval_node = eval_node
+                
+                alpha = max(alpha, score)
+                if beta <= alpha:
+                    break
+                
+                print('at node  (s = ' + str(node.score) + ', d = ' + str(depth) + '): a = ' + str(alpha) + ', b = ' + str(beta))
+            # print(maxEval_node.board.print_board())
+            # print(maxEval_node.depth)
+            print("----------depth " + str(node.depth) + " final maximum score found: " + str(maxEval_node.score))
+            return maxEval_node, maxEval
+        else: # if turn == "Red" (original)
+            minEval = float('inf')
+            minEval_node = node
+            for child in node.children:
+                
+                eval_node, score = self.minimax_test(child, depth - 1, alpha, beta, True, has_move_ordering)
+                # print("compare to " + str(score))
+                original_minEval = minEval
+                minEval = min(minEval, score)
+                # print("minimum score found: " + str(minEval))
+                # print("")
+                
+                if minEval == score and minEval != original_minEval:
+                    minEval_node.node = eval_node
+                
+                beta = min(beta, score)
+                if beta <= alpha:
+                    break
+                
+                print('at node  (s = ' + str(node.score) + ', d = ' + str(depth) + '): a = ' + str(alpha) + ', b = ' + str(beta))
+            # print(minEval_node.board.print_board())
+            # print(minEval_node.depth)
+            print("----------depth " + str(node.depth) + " final minimum score found: " + str(minEval_node.score))
+            return minEval_node, minEval
     
     def original_minimax(self, node, depth, alpha, beta, turn, has_move_ordering):
         '''performs the minimax algorithm and builds the tree as minimax is being performed'''
