@@ -67,7 +67,7 @@ class Tree:
             return minEval_node, minEval
     
     def minimax_no_pruning(self, node, depth, maximizer, has_move_ordering):
-        '''performs the minimax algorithm and builds the tree as minimax is being performed'''
+        '''performs the minimax algorithm without pruning and builds the tree as minimax is being performed'''
         # turn is either "White" or "Red" depending on whose turn it is
         if maximizer:
             turn = "White"
@@ -77,7 +77,6 @@ class Tree:
         
         # generate children if node is non-leaf
         if node.depth < self.max_depth:
-            print("adding children")
             node.add_children()
             
             # if move ordering is specified, sort the children
