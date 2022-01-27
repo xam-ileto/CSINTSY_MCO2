@@ -71,6 +71,22 @@ class Tree:
                 
             return minEval_node, minEval
     
+    def count_nodes(self, visited_nodes, node):
+        '''counts the total number of nodes'''
+        if node not in visited_nodes:
+            self.number_of_nodes += 1
+            visited_nodes.append(node)
+            for child in node.children:
+                self.count_nodes(visited_nodes, child)
+    
+    def print_tree(self, visited_nodes, node):
+        '''For debugging purposes: prints tree using DFS'''
+        if node not in visited_nodes:
+            node.print_node()
+            visited_nodes.append(node)
+            for child in node.children:
+                self.print_tree(visited_nodes, child)
+
     def minimax_no_pruning(self, node, depth, maximizer, has_move_ordering):
         '''performs the minimax algorithm without pruning and builds the tree as minimax is being performed'''
         # turn is either "White" or "Red" depending on whose turn it is
@@ -122,20 +138,3 @@ class Tree:
                 
                 
             return minEval_node, minEval
-    
-    def count_nodes(self, visited_nodes, node):
-        '''counts the total number of nodes'''
-        if node not in visited_nodes:
-            self.number_of_nodes += 1
-            visited_nodes.append(node)
-            for child in node.children:
-                self.count_nodes(visited_nodes, child)
-    
-    def print_tree(self, visited_nodes, node):
-        '''For debugging purposes: prints tree using DFS'''
-        if node not in visited_nodes:
-            node.print_node()
-            visited_nodes.append(node)
-            for child in node.children:
-                self.print_tree(visited_nodes, child)
-        
