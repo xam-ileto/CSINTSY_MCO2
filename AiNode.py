@@ -1,10 +1,9 @@
 
 class AiNode:
-    def __init__(self, board, depth, color, moved_piece):
+    def __init__(self, board, depth, color):
         self.board = board
         self.depth = depth
         self.turn = color
-        self.moved_piece = moved_piece # is None if root node
         
         self.score = self.board.calculate_score()
         self.children = []
@@ -18,7 +17,7 @@ class AiNode:
         for next_moves in self.board._next_user_moves(self.board.pieces_of_color(self.turn)):
             
             next_moves.board.calculate_stats()
-            new_node = AiNode(next_moves.board, self.depth + 1, next_color, next_moves.moved_piece)
+            new_node = AiNode(next_moves.board, self.depth + 1, next_color)
             self.children.append(new_node)
     
     def sort_children_descending(self):
