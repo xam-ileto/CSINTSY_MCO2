@@ -41,7 +41,7 @@ class Game:
     def simulate_turn(self, color):
         if self.player_turn == "Red":
             # show possible moves and ask player for move
-            move = self.current_board.choose_move(self.current_board._next_user_moves(self.current_board.pieces_of_color(color)))
+            move = self.current_board.choose_move(self.current_board.next_user_moves(self.current_board.pieces_of_color(color)))
         else:
             # if white turn
             print("AI is calculating next move...")
