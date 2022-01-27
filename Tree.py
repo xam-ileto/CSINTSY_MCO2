@@ -1,5 +1,3 @@
-from AiNode import AiNode
-
 class Tree:
     def __init__(self, root, max_depth):
         self.root = root
