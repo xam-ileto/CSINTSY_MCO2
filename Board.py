@@ -413,27 +413,30 @@ class Board:
             # if AI can be eaten, -3
             outcome -= self.can_be_eaten(piece.name) * 3
             
-            # if AI can eat, plus 6
+            # if AI can eat in lower left, plus 6
             if piece.row + 2 <= 7  and piece.col - 2 >= 0: 
                 piece_check = self.piece_in_pos(piece.row + 1, piece.col - 1)
                 if  piece_check != None:
                     if piece_check.color == "Red" and self.piece_in_pos(piece.row + 2, piece.col - 2) == None:
                         outcome += 6
             
+            # if AI can eat in upper right, plus 6
             if piece.row + 2 <= 7  and piece.col + 2 <= 7:   
                 piece_check = self.piece_in_pos(piece.row + 1, piece.col + 1)
                 if  piece_check != None:
                     if piece_check.color == "Red" and self.piece_in_pos(piece.row + 2, piece.col + 2) == None:
                         outcome += 6
                     
-            # if piece is king
+            # if piece is king check upper tiles
             if piece.is_king:
+                # if AI can eat in upper left, plus 6
                 if piece.row - 2 >= 0  and piece.col - 2 >= 0:   
                     piece_check = self.piece_in_pos(piece.row - 1, piece.col - 1)
                     if  piece_check != None:
                         if piece_check.color == "Red" and self.piece_in_pos(piece.row - 2, piece.col - 2) == None:
                             outcome += 6
-                
+            
+                # if piece is king and can eat in upper right, plus 6
                 if piece.row - 2 >= 0  and piece.col + 2 <= 7:  
                     piece_check = self.piece_in_pos(piece.row - 1, piece.col + 1)
                     if  piece_check != None:
