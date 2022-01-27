@@ -25,6 +25,7 @@ class Game:
             self.change_turn()
 
         # game over
+        self.current_board.print_board()
         if (self.player_turn == "White"):
             print("Red wins!")
         else:
