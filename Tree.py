@@ -18,7 +18,6 @@ class Tree:
         else:
             turn = "Red"
         
-        
         # generate children if node is non-leaf
         if node.depth < self.max_depth:
             node.add_children()
@@ -28,38 +27,46 @@ class Tree:
                 node.sort_children_descending()
         self.counter += 1
         
+        # if leaf node is found
         if depth == 0 or node.board.check_game_over(turn):
             return node, node.score
         
-        if maximizer:
+        if maximizer: # if white turn
             maxEval = float('-inf')
             maxEval_node = node
+            
+            # perform minimax for each child
             for child in node.children:
                 eval_node, score = self.minimax(child, depth - 1, alpha, beta, False, has_move_ordering)
                 
                 original_maxEval = maxEval
                 maxEval = max(maxEval, score)
                 
+                # if new maximum was found, change the maximum node
                 if maxEval == score and maxEval != original_maxEval:
                     maxEval_node = eval_node
                 
+                # perform pruning
                 alpha = max(alpha, score)
                 if beta <= alpha:
                     break
                 
             return maxEval_node, maxEval
-        else: # if turn == "Red"
+        else: # if red turn
             minEval = float('inf')
             minEval_node = node
+            
+            # perform minimax for each child
             for child in node.children:
-                
                 eval_node, score = self.minimax(child, depth - 1, alpha, beta, True, has_move_ordering)
                 original_minEval = minEval
                 minEval = min(minEval, score)
                 
+                # if new minimum was found, change the minimum node
                 if minEval == score and minEval != original_minEval:
                     minEval_node.node = eval_node
                 
+                # perform pruning
                 beta = min(beta, score)
                 if beta <= alpha:
                     break
