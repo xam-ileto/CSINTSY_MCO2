@@ -1,6 +1,9 @@
 from copy import deepcopy
 
 class NodeUserMoves:
+    '''Node class for finding the next possible moves of the player'''
+    # Note: this is only for the player moves, NOT the AI moves
+    
     def __init__(self, piece, board, row, col):
         # moved_piece is the name of the passed piece
         self.moved_piece = piece
