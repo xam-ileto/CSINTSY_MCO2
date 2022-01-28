@@ -17,7 +17,7 @@ class Tree:
             turn = "Red"
         
         # generate children if node is non-leaf
-        if node.depth < self.max_depth:
+        if node.depth < self.max_depth and node.children == []:
             node.add_children()
             
             # if move ordering is specified, sort the children
@@ -95,9 +95,8 @@ class Tree:
         else:
             turn = "Red"
         
-        
         # generate children if node is non-leaf
-        if node.depth < self.max_depth:
+        if node.depth < self.max_depth and node.children == []:
             node.add_children()
             
             # if move ordering is specified, sort the children

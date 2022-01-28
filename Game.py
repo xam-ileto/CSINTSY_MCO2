@@ -49,6 +49,58 @@ class Game:
             root = AiNode(self.current_board, 0, "White")
             ordering_tree = Tree(root, 2)
             move, score = ordering_tree.minimax(ordering_tree.root, 2, -100000, 100000, True, True)
+            
+            # TO DO
+            # With move ordering
+            DEPTH = 2
+            print("WITH MOVE ORDERING")
+            visited = []
+            ordering_tree.print_tree(visited, ordering_tree.root)
+
+            print("nodes explored: " + str(ordering_tree.counter))
+            visited = []
+            ordering_tree.count_nodes(visited, ordering_tree.root)
+            print("total nodes: " + str(ordering_tree.number_of_nodes))
+
+            # Without move ordering
+            print("WITHOUT MOVE ORDERING")
+            new_root = AiNode(self.current_board, 0, "White")
+            new_tree = Tree(new_root, DEPTH)
+            move, move_score = new_tree.minimax(new_tree.root,DEPTH,-100000,100000,True,False)
+
+            visited = []
+            new_tree.print_tree(visited,new_tree.root)
+
+            print("nodes explored: " + str(new_tree.counter))
+            visited = []
+            new_tree.count_nodes(visited, new_tree.root)
+            print("total nodes: " + str(new_tree.number_of_nodes))
+
+            # No pruning, with ordering
+            print("NO PRUNING, WITH ORDERING")
+            root3 = AiNode(self.current_board, 0, "White")
+            tree3 = Tree(root, DEPTH)
+            move, move_score = tree3.minimax_no_pruning(tree3.root, DEPTH, True, True)
+
+            visited = []
+            tree3.count_nodes(visited, tree3.root)
+
+            # visited = []
+            # tree3.print_tree(visited, tree3.root)
+            print("total nodes: " + str(tree3.number_of_nodes))
+
+            # No pruning, without ordering
+            print("NO PRUNING, WITHOUT ORDERING")
+            root4 = AiNode(self.current_board, 0, "White")
+            tree4 = Tree(root, DEPTH)
+            move, move_score = tree4.minimax_no_pruning(tree4.root, DEPTH, True, True)
+
+            # visited = []
+            # tree4.print_tree(visited, tree4.root)
+
+            visited = []
+            tree4.count_nodes(visited, tree4.root)
+            print("total nodes: " + str(tree4.number_of_nodes))
 
         # perform the move and change the board
         self.current_board = deepcopy(move.board)
