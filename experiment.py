@@ -2,6 +2,7 @@ from AiNode import AiNode
 from Board import Board
 from AiNode import AiNode
 from Tree import Tree
+import time
 
 b = Board("Start")
 
@@ -33,7 +34,11 @@ for DEPTH in DEPTHS:
     print("WITH MOVE ORDERING")
     root = AiNode(b, 0, "White")
     tree = Tree(root, DEPTH)
+    start = time.time()
     move, move_score = tree.minimax(tree.root,DEPTH,-100000,100000,True,True)
+    end = time.time()
+    total_time = end - start
+    print("time: " + str(total_time))
 
     # visited = []
     # tree.print_tree(visited, tree.root)
@@ -48,7 +53,11 @@ for DEPTH in DEPTHS:
     print("WITHOUT MOVE ORDERING")
     new_root = AiNode(b, 0, "White")
     new_tree = Tree(new_root, DEPTH)
+    start = time.time()
     move, move_score = new_tree.minimax(new_tree.root,DEPTH,-100000,100000,True,False)
+    end = time.time()
+    total_time = end - start
+    print("time: " + str(total_time))
 
     # visited = []
     # new_tree.print_tree(visited,new_tree.root)
@@ -63,7 +72,11 @@ for DEPTH in DEPTHS:
     print("NO PRUNING, WITH ORDERING")
     root3 = AiNode(b, 0, "White")
     tree3 = Tree(root, DEPTH)
+    start = time.time()
     move, move_score = tree3.minimax_no_pruning(tree3.root, DEPTH, True, True)
+    end = time.time()
+    total_time = end - start
+    print("time: " + str(total_time))
 
     visited = []
     tree3.count_nodes(visited, tree3.root)
@@ -77,7 +90,11 @@ for DEPTH in DEPTHS:
     print("NO PRUNING, WITHOUT ORDERING")
     root4 = AiNode(b, 0, "White")
     tree4 = Tree(root, DEPTH)
+    start = time.time()
     move, move_score = tree4.minimax_no_pruning(tree4.root, DEPTH, True, True)
+    end = time.time()
+    total_time = end - start
+    print("time: " + str(total_time))
 
     # visited = []
     # tree4.print_tree(visited, tree4.root)
