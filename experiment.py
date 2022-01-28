@@ -26,57 +26,64 @@ b.get_piece("W9").move(3,0)
 b.calculate_stats()
 b.print_board()
 
+for DEPTH in DEPTHS:
+    print("IN DEPTH " + str(DEPTH) + "*************************")
+    
+    # With move ordering
+    print("WITH MOVE ORDERING")
+    root = AiNode(b, 0, "White")
+    tree = Tree(root, DEPTH)
+    move, move_score = tree.minimax(tree.root,DEPTH,-100000,100000,True,True)
 
-# With move ordering
-print("WITH MOVE ORDERING")
-root = AiNode(b, 0, "White")
-tree = Tree(root, DEPTH)
-move, move_score = tree.minimax(tree.root,DEPTH,-100000,100000,True,True)
+    # visited = []
+    # tree.print_tree(visited, tree.root)
 
-# visited = []
-# tree.print_tree(visited, tree.root)
+    print("nodes explored: " + str(tree.counter))
+    visited = []
+    tree.count_nodes(visited, tree.root)
+    print("total nodes: " + str(tree.number_of_nodes))
+    print("")
 
-print("nodes explored: " + str(tree.counter))
-visited = []
-tree.count_nodes(visited, tree.root)
-print("total nodes: " + str(tree.number_of_nodes))
+    # Without move ordering
+    print("WITHOUT MOVE ORDERING")
+    new_root = AiNode(b, 0, "White")
+    new_tree = Tree(new_root, DEPTH)
+    move, move_score = new_tree.minimax(new_tree.root,DEPTH,-100000,100000,True,False)
 
-# Without move ordering
-print("WITHOUT MOVE ORDERING")
-new_root = AiNode(b, 0, "White")
-new_tree = Tree(new_root, DEPTH)
-move, move_score = new_tree.minimax(new_tree.root,DEPTH,-100000,100000,True,False)
+    # visited = []
+    # new_tree.print_tree(visited,new_tree.root)
 
-# visited = []
-# new_tree.print_tree(visited,new_tree.root)
+    print("nodes explored: " + str(new_tree.counter))
+    visited = []
+    new_tree.count_nodes(visited, new_tree.root)
+    print("total nodes: " + str(new_tree.number_of_nodes))
+    print("")
 
-print("nodes explored: " + str(new_tree.counter))
-visited = []
-new_tree.count_nodes(visited, new_tree.root)
-print("total nodes: " + str(new_tree.number_of_nodes))
+    # No pruning, with ordering
+    print("NO PRUNING, WITH ORDERING")
+    root3 = AiNode(b, 0, "White")
+    tree3 = Tree(root, DEPTH)
+    move, move_score = tree3.minimax_no_pruning(tree3.root, DEPTH, True, True)
 
-# No pruning, with ordering
-print("NO PRUNING, WITH ORDERING")
-root3 = AiNode(b, 0, "White")
-tree3 = Tree(root, DEPTH)
-move, move_score = tree3.minimax_no_pruning(tree3.root, DEPTH, True, True)
+    visited = []
+    tree3.count_nodes(visited, tree3.root)
 
-visited = []
-tree3.count_nodes(visited, tree3.root)
+    # visited = []
+    # tree3.print_tree(visited, tree3.root)
+    print("total nodes: " + str(tree3.number_of_nodes))
+    print("")
 
-# visited = []
-# tree3.print_tree(visited, tree3.root)
-print("total nodes: " + str(tree3.number_of_nodes))
+    # No pruning, without ordering
+    print("NO PRUNING, WITHOUT ORDERING")
+    root4 = AiNode(b, 0, "White")
+    tree4 = Tree(root, DEPTH)
+    move, move_score = tree4.minimax_no_pruning(tree4.root, DEPTH, True, True)
 
-# No pruning, without ordering
-print("NO PRUNING, WITHOUT ORDERING")
-root4 = AiNode(b, 0, "White")
-tree4 = Tree(root, DEPTH)
-move, move_score = tree4.minimax_no_pruning(tree4.root, DEPTH, True, True)
+    # visited = []
+    # tree4.print_tree(visited, tree4.root)
 
-# visited = []
-# tree4.print_tree(visited, tree4.root)
-
-visited = []
-tree4.count_nodes(visited, tree4.root)
-print("total nodes: " + str(tree4.number_of_nodes))
+    visited = []
+    tree4.count_nodes(visited, tree4.root)
+    print("total nodes: " + str(tree4.number_of_nodes))
+    print("")
+    print("")
