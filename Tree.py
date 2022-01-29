@@ -125,12 +125,3 @@ class Tree:
             visited_nodes.append(node)
             for child in node.children:
                 self.count_nodes(visited_nodes, child)
-    
-    def print_tree(self, visited_nodes, node):
-        '''For debugging purposes: prints tree using DFS'''
-        if node not in visited_nodes:
-            node.print_node()
-            visited_nodes.append(node)
-            for child in node.children:
-                self.print_tree(visited_nodes, child)
-        
