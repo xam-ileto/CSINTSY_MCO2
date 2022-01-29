@@ -23,11 +23,3 @@ class AiNode:
     def sort_children_descending(self):
         '''Sorts the children of this node in descending order for move ordering'''
         self.children.sort(key = lambda x: x.score, reverse= True)
-    
-    def print_node(self):
-        '''prints node for debugging purposes'''
-        tab = ' ' * self.depth * 5
-        
-        print(tab + "Node score: " + str(self.score))
-        print(tab + "Node depth: " + str(self.depth))
-        print(tab + "turn: " + self.turn)
