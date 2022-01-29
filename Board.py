@@ -71,7 +71,7 @@ class Board:
 
     def next_piece_moves(self, piece):
         # shows the next possible immediate moves for a chosen piece
-        # calls _is_tile_valid
+        # calls is_tile_valid
 
         possible_moves = []
         row = piece.row
@@ -83,54 +83,54 @@ class Board:
             # if piece is king, check 4 diagonal tiles
             # if the diagonal tile has a piece, check the diagonal of the tile
             # upper left tile
-            possible_tiles["UL"] = self._get_diagonal("UL", row, col)
+            possible_tiles["UL"] = self.get_diagonal("UL", row, col)
             # upper right
-            possible_tiles["UR"] = self._get_diagonal("UR", row, col)
+            possible_tiles["UR"] = self.get_diagonal("UR", row, col)
             # lower left
-            possible_tiles["LL"] = self._get_diagonal("LL", row, col)
+            possible_tiles["LL"] = self.get_diagonal("LL", row, col)
             # lower right
-            possible_tiles["LR"] = self._get_diagonal("LR", row, col)
+            possible_tiles["LR"] = self.get_diagonal("LR", row, col)
         else: # piece is not a king
             if player_color == "White":
                 # lower left
-                possible_tiles["LL"] = self._get_diagonal("LL", row, col)
+                possible_tiles["LL"] = self.get_diagonal("LL", row, col)
                 # lower right
-                possible_tiles["LR"] = self._get_diagonal("LR", row, col)
+                possible_tiles["LR"] = self.get_diagonal("LR", row, col)
             else: # player_color == "Red"
                 # upper left tile
-                possible_tiles["UL"] = self._get_diagonal("UL", row, col)
+                possible_tiles["UL"] = self.get_diagonal("UL", row, col)
                 # upper right
-                possible_tiles["UR"] = self._get_diagonal("UR", row, col)
+                possible_tiles["UR"] = self.get_diagonal("UR", row, col)
         
         for position, coordinate in possible_tiles.items():
             # if position is not valid, continue (no need to check)
             coordinate_row = coordinate[0]
             coordinate_col = coordinate[1]
-            if self._is_tile_valid(coordinate_row, coordinate_col) == False:
+            if self.is_tile_valid(coordinate_row, coordinate_col) == False:
                 continue
 
             # if no piece in tile, add to possible moves
-            piece_in_diagonal = self._piece_in_pos(coordinate_row, coordinate_col)
+            piece_in_diagonal = self.piece_in_pos(coordinate_row, coordinate_col)
             if  piece_in_diagonal == None:
                 possible_moves.append(coordinate)
             
             # else if there is a piece of opposite color, check diagonal tile
             # if no piece in diagonal tile, add to possible moves
-            elif piece_in_diagonal._is_enemy_piece(player_color):
+            elif piece_in_diagonal.is_enemy_piece(player_color):
                 if position == "UL":
-                    skip_coordinates = self._get_diagonal("UL", coordinate_row, coordinate_col)
+                    skip_coordinates = self.get_diagonal("UL", coordinate_row, coordinate_col)
                 elif position == "UR":
-                    skip_coordinates = self._get_diagonal("UR", coordinate_row, coordinate_col)
+                    skip_coordinates = self.get_diagonal("UR", coordinate_row, coordinate_col)
                 elif position == "LL":
-                    skip_coordinates = self._get_diagonal("LL", coordinate_row, coordinate_col)
+                    skip_coordinates = self.get_diagonal("LL", coordinate_row, coordinate_col)
                 elif position == "LR":
-                    skip_coordinates = self._get_diagonal("LR", coordinate_row, coordinate_col)
+                    skip_coordinates = self.get_diagonal("LR", coordinate_row, coordinate_col)
 
                 # if skip_coordinates is not valid, continue
-                if self._is_tile_valid(skip_coordinates[0], skip_coordinates[1]) == False:
+                if self.is_tile_valid(skip_coordinates[0], skip_coordinates[1]) == False:
                     continue
 
-                if self._piece_in_pos(skip_coordinates[0], skip_coordinates[1]) == None:
+                if self.piece_in_pos(skip_coordinates[0], skip_coordinates[1]) == None:
                     possible_moves.append(skip_coordinates)
                 
         
@@ -138,7 +138,7 @@ class Board:
         return possible_moves
         
 
-    def _is_tile_valid(self, row, col):
+    def is_tile_valid(self, row, col):
         # checks if a passed position goes out of bounds
         if row < 0 or row > 7 or col < 0 or col > 7:
             # return false if out of bounds
@@ -147,10 +147,10 @@ class Board:
         # return true if within bounds
         return True
     
-    def _eat_piece(self, piece):
+    def eat_piece(self, piece):
         self.pieces.remove(piece)
 
-    def _piece_in_pos(self, row, col):
+    def piece_in_pos(self, row, col):
         for piece in self.pieces:
             if piece.col == col and piece.row == row:
                 return piece
@@ -163,7 +163,7 @@ class Board:
             if piece.name == name:
                 return piece
 
-    def _get_diagonal(self, diagonal, row, col):
+    def get_diagonal(self, diagonal, row, col):
         # diagonal is a code for what diagonal to get
         # UL = upper left, UR = upper right, LL = lower left, LR = lower right
         # returns list with positions
@@ -177,7 +177,7 @@ class Board:
         elif diagonal == "LR":
             return [row + 1, col + 1]
 
-    def _next_user_moves(self, player_pieces):
+    def next_user_moves(self, player_pieces):
         # returns final possible moves for the player
         final_possible_moves = []
         movable_pieces = []
@@ -200,7 +200,7 @@ class Board:
                 start_node = NodeUserMoves(piece.name, self, root_row, root_col)
 
                 # if a skip, add to the stack
-                if start_node.get_final_board()._check_is_skip(start_node.get_final_board().get_piece(start_node.moved_piece), move[0]):
+                if start_node.get_final_board().check_is_skip(start_node.get_final_board().get_piece(start_node.moved_piece), move[0]):
                     stack.append(start_node)
                 else:
                     final_possible_moves.append(start_node)
@@ -225,7 +225,7 @@ class Board:
                 unfiltered_next_possible_moves = current_board.next_piece_moves(current_piece)
                 next_possible_moves = []
                 for move in unfiltered_next_possible_moves:
-                    skipCheck = self._check_is_skip(current_piece, move[0])
+                    skipCheck = self.check_is_skip(current_piece, move[0])
                     if skipCheck == True:
                         next_possible_moves.append(move)
                 # results in next_possible_moves containing the possible moves for this current node
@@ -275,7 +275,7 @@ class Board:
 
                  
         
-    def _get_inner_diagonal(self, position, row, col):
+    def get_inner_diagonal(self, position, row, col):
         # pass position of tile (ex. "UR"/"UL")
         if position == "UL":
             row = row - 1
@@ -293,7 +293,7 @@ class Board:
         # returns immediate inner tile in that position
         return row, col
     
-    def _check_is_skip(self, piece, row):
+    def check_is_skip(self, piece, row):
         if (row  == piece.row - 2 or row == piece.row + 2):
             return True
         
@@ -301,7 +301,7 @@ class Board:
         return False
     
     
-    def _check_which_diagonal(self, piece, row, col):
+    def check_which_diagonal(self, piece, row, col):
         current_row = piece.row
         current_col = piece.col
 
@@ -320,25 +320,25 @@ class Board:
         # function moves selected piece and also eats enemy if piece skips a tile when moving to row and col
         current_row = piece.row
         current_col = piece.col
-        is_skip = self._check_is_skip(piece, row)
+        is_skip = self.check_is_skip(piece, row)
 
-        moving_to_position = self._check_which_diagonal(piece, row, col)
+        moving_to_position = self.check_which_diagonal(piece, row, col)
 
         if (is_skip):
             # eat enemy
-            eaten_piece_row, eaten_piece_col = self._get_inner_diagonal(moving_to_position, current_row, current_col)
-            eaten_piece = self._piece_in_pos(eaten_piece_row, eaten_piece_col)
-            self._eat_piece(eaten_piece)
+            eaten_piece_row, eaten_piece_col = self.get_inner_diagonal(moving_to_position, current_row, current_col)
+            eaten_piece = self.piece_in_pos(eaten_piece_row, eaten_piece_col)
+            self.eat_piece(eaten_piece)
 
             # move current piece
             for i in range(0, 2):
-                current_row, current_col = self._get_inner_diagonal(moving_to_position, current_row, current_col)
+                current_row, current_col = self.get_inner_diagonal(moving_to_position, current_row, current_col)
 
             piece.move(current_row, current_col)
         
         # if not a skip
         else:
-            current_row, current_col = self._get_inner_diagonal(moving_to_position, current_row, current_col)
+            current_row, current_col = self.get_inner_diagonal(moving_to_position, current_row, current_col)
 
             piece.move(current_row, current_col)
     
@@ -383,7 +383,7 @@ class Board:
         else:
             enemy_color = "Red"
         
-        possible_moves = self._next_user_moves(self.pieces_of_color(enemy_color))
+        possible_moves = self.next_user_moves(self.pieces_of_color(enemy_color))
         
         for move in possible_moves:
             remaining_pieces = [piece.name for piece in move.board.pieces]
@@ -393,6 +393,54 @@ class Board:
                 count += 1
         
         return count
+    
+    def calculate_score(self):
+        outcome = 0
+        white_pieces = self.white_pieces
+        red_pieces = self.red_pieces
+        
+        for piece in self.pieces_of_color("White"):
+            if piece.is_king:
+                outcome += 8
+            else:
+                outcome += 5
+            
+            # if at edge, plus 7
+            if piece.row == 0 or piece.col == 0 or piece.row == 7 or piece.col == 7:
+                outcome += 7
+            
+            
+            # if AI can be eaten, -3
+            outcome -= self.can_be_eaten(piece.name) * 3
+            
+            # if AI can eat, plus 6
+            if piece.row + 2 <= 7  and piece.col - 2 >= 0: 
+                piece_check = self.piece_in_pos(piece.row + 1, piece.col - 1)
+                if  piece_check != None:
+                    if piece_check.color == "Red" and self.piece_in_pos(piece.row + 2, piece.col - 2) == None:
+                        outcome += 6
+            
+            if piece.row + 2 <= 7  and piece.col + 2 <= 7:   
+                piece_check = self.piece_in_pos(piece.row + 1, piece.col + 1)
+                if  piece_check != None:
+                    if piece_check.color == "Red" and self.piece_in_pos(piece.row + 2, piece.col + 2) == None:
+                        outcome += 6
+                    
+            # if piece is king
+            if piece.is_king:
+                if piece.row - 2 >= 0  and piece.col - 2 >= 0:   
+                    piece_check = self.piece_in_pos(piece.row - 1, piece.col - 1)
+                    if  piece_check != None:
+                        if piece_check.color == "Red" and self.piece_in_pos(piece.row - 2, piece.col - 2) == None:
+                            outcome += 6
+                
+                if piece.row - 2 >= 0  and piece.col + 2 <= 7:  
+                    piece_check = self.piece_in_pos(piece.row - 1, piece.col + 1)
+                    if  piece_check != None:
+                        if piece_check.color == "Red" and self.piece_in_pos(piece.row - 2, piece.col + 2) == None:
+                            outcome += 6
+
+        return outcome + (white_pieces - red_pieces) * 1000
 
 
     def choose_move(self, final_moves):
@@ -403,6 +451,8 @@ class Board:
         for move in final_moves:
             print("-- Choice " + str(choice_number))
             move.print_node()
+            # TO DO
+            print("score: " + str(move.board.calculate_score()))
             choice_number += 1
         
         print("")
@@ -428,7 +478,7 @@ class Board:
             for j in range(0, 8):
 
                 # print piece in tile
-                piece = self._piece_in_pos(i, j)
+                piece = self.piece_in_pos(i, j)
                 if  piece != None:
                     name = piece.name
                     if piece.is_king == True:
@@ -456,7 +506,7 @@ class Board:
         elif color_turn == "Red" and self.red_pieces == 0:
             over = True
 
-        if self._next_user_moves(self.pieces_of_color(color_turn)) == []:
+        if self.next_user_moves(self.pieces_of_color(color_turn)) == []:
             over = True
 
         return over

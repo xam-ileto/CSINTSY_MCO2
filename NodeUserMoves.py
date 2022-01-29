@@ -19,7 +19,7 @@ class NodeUserMoves:
     
     def add_move(self, board, row, col):
         if self.board != None:
-            self.is_last_move_skip = self.board._check_is_skip(self.board.get_piece(self.moved_piece), row)
+            self.is_last_move_skip = self.board.check_is_skip(self.board.get_piece(self.moved_piece), row)
 
         self.board = board
         position = [row, col]

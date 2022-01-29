@@ -17,7 +17,7 @@ class Piece:
     def make_king(self):
         self.is_king = True
 
-    def _is_enemy_piece(self, player_color):
+    def is_enemy_piece(self, player_color):
         # pass string of current team color
         # checks if passed piece is enemy of current player
         if self.color != player_color:
